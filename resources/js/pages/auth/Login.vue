@@ -36,7 +36,7 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit" class="flex flex-col gap-6 text-darkTextPrincipal1">
-            <div class="grid gap-6">
+            <div class="grid gap-4">
                 <div class="grid gap-2">
                     <Label for="e-mail">E-mail</Label>
                     <Input
@@ -78,7 +78,7 @@ const submit = () => {
                     </Label>
                 </div>
 
-                <Button type="submit" class="mt-4 w-full bg-greenPrincipal1 hover:bg-[#00929D]" :tabindex="4" :disabled="form.processing">
+                <Button variant="slateDefault" type="submit" class="mt-4" :tabindex="4" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Entrar
                 </Button>
