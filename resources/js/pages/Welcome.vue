@@ -20,14 +20,6 @@ import Logo from '@/components/svg/Logo.vue'
             </ul>
 
             <nav class="flex items-center justify-end gap-2">
-                <Link
-                    v-if="$page.props.auth.user"
-                    :href="route('dashboard')"
-                    class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                >
-                    Dashboard
-                </Link>
-                <template v-else>
                     <Link
                         :href="route('login')"
                         class="inline-block rounded-md border border-stroke1 px-5 py-1.5 text-sm leading-normal text-darkTextPrincipal1 font-medium hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
@@ -35,12 +27,11 @@ import Logo from '@/components/svg/Logo.vue'
                         Entrar
                     </Link>
                     <Link
-                        :href="route('register')"
+                        :href="route('user.register')"
                         class="inline-block rounded-md bg-greenPrincipal1 hover:bg-[#00929D] px-5 py-1.5 text-sm leading-normal text-white font-medium hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                     >
                         Criar Conta
                     </Link>
-                </template>
             </nav>
         </header>
         <div class="w-full flex flex-col items-center gap-16 justify-center text-darkTextPrincipal1">

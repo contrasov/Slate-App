@@ -86,7 +86,7 @@ const submit = () => {
 
             <div class="text-center text-sm text-muted-foreground">
                 Ainda não tem uma conta?
-                <TextLink :href="route('register')" :tabindex="5">Criar conta</TextLink>
+                <TextLink :href="route('user.register')" :tabindex="5">Criar conta</TextLink>
             </div>
         </form>
     </AuthBase>
