@@ -35,9 +35,9 @@ class RegisterUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => 'médico',
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
 
-        return response()->json(['user' => $user], 201);
+        return redirect()->route('user.login');
     }
 }
