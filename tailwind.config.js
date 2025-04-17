@@ -75,7 +75,8 @@ export default {
                 /* personalizado */
                 'darkTextPrincipal1': '#212223',
                 'greenPrincipal1' : '#1DD496',
-                'stroke1': '#E9E8E8'
+                'stroke1': '#E9E8E8',
+                'icon-secondary-light': '#787676'
             },
         },
     },
