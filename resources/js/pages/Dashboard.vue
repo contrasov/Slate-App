@@ -23,9 +23,12 @@ const user = page.props.auth.user as User;
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 p-4">
+        <div class="flex bg-sidebar h-full flex-1 flex-col gap-4 p-4">
             <Header :user="user"/>
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div class="grid auto-rows-min gap-4 md:grid-cols-4">
+                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                    <PlaceholderPattern />
+                </div>
                 <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                     <PlaceholderPattern />
                 </div>
@@ -36,7 +39,7 @@ const user = page.props.auth.user as User;
                     <PlaceholderPattern />
                 </div>
             </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
+            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
                 <PlaceholderPattern />
             </div>
         </div>
