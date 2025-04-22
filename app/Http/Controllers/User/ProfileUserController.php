@@ -9,8 +9,6 @@ use Inertia\Inertia;
 class ProfileUserController extends Controller
 {
     public function setting(Request $request){
-        return Inertia::render('setting/Profile');
+        return Inertia::render('settings/Profile');
     }
-
-    
 }

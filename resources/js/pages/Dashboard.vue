@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/vue3';
 import { type SharedData, type User } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import PlaceholderPattern from '../components/PlaceholderPattern.vue';
-import Header from '@/components/Header.vue';
+import DataTableHome from '@/components/DataTableHome.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,7 +24,7 @@ const user = page.props.auth.user as User;
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex bg-sidebar h-full flex-1 flex-col gap-4 p-4">
-            <Header :user="user"/>
+            <h1 class="font-bold" >Bem-vindo(a), {{ user.name }} 👋🏼</h1>
             <div class="grid auto-rows-min gap-4 md:grid-cols-4">
                 <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                     <PlaceholderPattern />
@@ -39,8 +39,8 @@ const user = page.props.auth.user as User;
                     <PlaceholderPattern />
                 </div>
             </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
-                <PlaceholderPattern />
+            <div class="relative min-h-[100vh] bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
+                <DataTableHome/>
             </div>
         </div>
     </AppLayout>

@@ -5,7 +5,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Library, UsersRound } from 'lucide-vue-next';
+import { CalendarDays, LayoutGrid, Library, UsersRound } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -16,13 +16,18 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Fichas',
-        href: '/form',
+        href: '/forms',
         icon: Library,
     },
     {
         title: 'Pacientes',
         href: '/patients',
         icon: UsersRound,
+    }, 
+    {
+        title: 'Agenda',
+        href: '/schedule',
+        icon: CalendarDays,
     }, 
 ];
 
