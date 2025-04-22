@@ -16,7 +16,11 @@ Route::get('/', function () {
 
 // Rota agendamento
 Route::get('schedule', [ScheduleController::class, 'show'])
+    ->middleware(['auth'])
     ->name('schedule');
+
+ Route::get('schedule-public', [ScheduleController::class, 'schedule'])
+    ->name('schedule.create');
 
 // Rota com auth
 Route::get('dashboard', function () {

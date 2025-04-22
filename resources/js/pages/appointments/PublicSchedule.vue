@@ -1,43 +1,41 @@
+<script setup lang="ts">
+import { Head } from '@inertiajs/vue3';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+
+const freeTime = [
+    {
+        id: 1,
+        time: '09:00h',
+    },
+    {
+        id: 2,
+        time: '12:00h',
+    },
+    {
+        id: 3,
+        time: '14:30h',
+    },
+    {
+        id: 4,
+        time: '15:30h',
+    }
+]
+
+</script>
+
 <template>
-    <div class="min-h-screen bg-gray-100">
-        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <h1 class="text-2xl font-bold mb-4">Agendamentos de {{ user.name }}</h1>
-                    
-                    <div v-if="appointments.length > 0" class="space-y-4">
-                        <div v-for="appointment in appointments" :key="appointment.id" 
-                             class="border rounded-lg p-4 hover:bg-gray-50">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold">{{ appointment.description }}</p>
-                                    <p class="text-gray-600">
-                                        {{ formatDate(appointment.date) }} às {{ appointment.time }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div v-else class="text-center py-8 text-gray-500">
-                        Nenhum agendamento público disponível.
+    <main class="mx-[50vh] h-screen">
+        <Head title="Agendamento" />
+            <div class="flex flex-1 flex-col gap-4 p-4">
+                <h1 class="font-bold" >Agendar Consulta na {X}</h1>
+                <div class="flex relative h-fit flex-1 rounded-xl border border-sidebar-border">
+                    <Calendar/>
+                    <div class="flex flex-col gap-2 w-full p-4">
+                        <h1>Horários disponíveis:</h1>
+                        <Button variant="slateDefault" v-for="time in freeTime" :key="time.id" >{{ time.time }}</Button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+    </main>
 </template>
-
-<script setup>
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-
-const props = defineProps({
-    user: Object,
-    appointments: Array
-});
-
-const formatDate = (date) => {
-    return format(new Date(date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
-};
-</script> 

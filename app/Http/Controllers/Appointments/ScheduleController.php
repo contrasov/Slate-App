@@ -13,4 +13,12 @@ class ScheduleController extends Controller
     public function show(Request $request){
         return Inertia::render('appointments/Schedule');
     }
+
+    public function schedule(Request $rquest){
+        return Inertia::render('appointments/PublicSchedule');
+    }
+
+/*     public function schedulePublic($name){
+
+    } */
 }
