@@ -13,7 +13,7 @@ export const buttonVariants = cva(
                 secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'text-primary underline-offset-4 hover:underline',
-                slateDefault: 'bg-greenPrincipal1 hover:bg-[#00929D] text-white',
+                slateDefault: 'bg-[#0DB97F] hover:bg-[#00929D] text-white',
                 scheduleLink: 'border border-greenPrincipal1 text-greenPrincipal1 hover:bg-greenPrincipal1 hover:text-white'
             },
             size: {
