@@ -28,7 +28,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
-const schedules = page.props.schedules as Array<{ weekday: number; start_time: string; end_time: string; duration: string }>;
+const schedules = page.props.schedules as Array<{ id: number; weekday: number; start_time: string; end_time: string; duration: string }>;
 
 
 const form = useForm({

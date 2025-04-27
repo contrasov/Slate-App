@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\ScheduleService;
-use App\Repositories\Eloquent\ScheduleRepository;
 
 class SettingsUserController extends Controller
 {

@@ -34,7 +34,7 @@ class ScheduleController extends Controller
         
         foreach ($request->work_times as $workTime) {
             $data = [
-                'user_id' => auth()->id(),
+                'user_id' => auth()->id(),  /* verificar isso depois / possivel error?  */
                 'weekday' => $workTime['weekday'],
                 'start_time' => $workTime['start_time'],
                 'end_time' => $workTime['end_time'],
