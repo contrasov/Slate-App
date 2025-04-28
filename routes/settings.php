@@ -11,5 +11,4 @@ Route::middleware('auth')->group(function(){
     Route::get('settings/password', [SettingsUserController::class, 'password'])->name('password.edit');
 
     Route::get('settings/appearance', [SettingsUserController::class, 'appearance'])->name('appearance.edit');
-
 });

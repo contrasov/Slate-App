@@ -38,6 +38,6 @@ class RegisterUserController extends Controller
             'password' => $request->password,
         ]);
 
-        return redirect()->route('user.login');
+        return redirect()->route('login');
     }
 }

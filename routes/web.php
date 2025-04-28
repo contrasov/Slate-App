@@ -18,8 +18,13 @@ Route::get('schedule', [ScheduleController::class, 'show'])
     ->middleware(['auth'])
     ->name('schedule');
 
- Route::get('schedule-public', [ScheduleController::class, 'schedule'])
+Route::get('schedule-public', [ScheduleController::class, 'schedule'])
     ->name('schedule.create');
+
+Route::delete('schedule-public/{id}', [ScheduleController::class, 'destroy'])
+    ->middleware(['auth'])
+    ->name('schedule.destroy');
+
 
 // Rota com auth
 Route::get('dashboard', function () {

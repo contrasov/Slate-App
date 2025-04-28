@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { Trash, Pencil } from 'lucide-vue-next';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import Checkbox from './ui/checkbox/Checkbox.vue';
 import Input from './ui/input/Input.vue';
 import Button from './ui/button/Button.vue';
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, computed, defineEmits } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import {
     Dialog,
@@ -16,18 +17,18 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 
-const daysOfWeek = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
-const selectedDays = ref<Record<number, boolean>>({});
-const showForm = ref(false);
-
 const props = defineProps<{
     schedules: Array<{ id: number; weekday: number; start_time: string; end_time: string; duration: string }>;
 }>();
 
-selectedDays.value = props.schedules.reduce((acc, schedule) => {
-    acc[schedule.weekday] = true;
-    return acc;
-}, {} as Record<number, boolean>);
+const daysOfWeek = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
+const selectedDays = ref<Record<number, boolean>>({});
+const availableDays = computed(() => {
+const scheduledWeekdays = props.schedules.map(schedule => schedule.weekday);
+    return daysOfWeek
+        .map((day, index) => ({ day, index }))
+        .filter(({ index }) => !scheduledWeekdays.includes(index));
+});
 
 const form = useForm({
     work_times: daysOfWeek.map(() => ({
@@ -37,6 +38,8 @@ const form = useForm({
     })),
     duration: ''
 });
+
+const dialogOpen = ref(false);
 
 const formatTime = (event: Event) => {
     const input = event.target as HTMLInputElement;
@@ -67,17 +70,35 @@ const submit = () => {
     );
 
     form.post(route('work-time.store'), {
-        onFinish: () => {
-        },
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            dialogOpen.value = false;
+            form.reset();
+            selectedDays.value = {};
+            window.location.reload();  /* melhorar isso, pq ele ta dando é f5 */
+        }
     });
 };
+
+const deleteSchedule = (id: number) => {
+    form.delete(route('schedule.destroy', { id }), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            window.location.reload();
+        }
+    });
+}
+
+
 </script>
 
 <template>
     <div>
         <div class="flex items-center justify-between">
             <HeadingSmall title="Horário de Atendimento" description="Defina o seu intervalo de horas da semana." />
-            <Dialog>
+            <Dialog v-model:open="dialogOpen">
                 <DialogTrigger>
                     <Button>Adicionar dia</Button>
                 </DialogTrigger>
@@ -90,7 +111,7 @@ const submit = () => {
                     </DialogHeader>
                     <form @submit.prevent="submit">
                         <div class="flex flex-col gap-2">
-                            <div v-for="(day, index) in daysOfWeek" :key="index" class="flex items-center justify-between">
+                            <div v-for="({day, index}) in availableDays" :key="index" class="flex items-center justify-between">
                                 <div class="flex items-center gap-1">
                                     <Checkbox v-model="selectedDays[index]"/>
                                     <p>{{ day }}</p>
@@ -128,11 +149,7 @@ const submit = () => {
                             </div>
 
                             <div class="flex items-center gap-4">
-                                <Button type="submit" :disabled="form.processing">Salvar intervalos</Button>
-                                
-                                <p v-if="form.recentlySuccessful" class="text-sm text-neutral-600">
-                                    Salvo com sucesso.
-                                </p>
+                                <Button type="submit">Salvar intervalos</Button>                               
                             </div>
                         </div>
                     </form>
@@ -141,14 +158,18 @@ const submit = () => {
         </div>
 
         <div class="flex flex-col gap-4 mt-4">
-            <ul>
-                <li v-for="schedule in schedules" :key="schedule.weekday">
-                    id: {{ schedule.id }} - 
-                    Início: {{ schedule.start_time }} - 
-                    Fim: {{ schedule.end_time }} - 
-                    Duração: {{ schedule.duration }}
-                </li>
-            </ul>
+            <div class="flex flex-col justify-between" v-for="schedule in schedules" :key="schedule.weekday">
+                <p class="font-medium">{{ daysOfWeek[schedule.weekday] }}</p>
+                <div class="flex flex-row justify-between items-center">
+                    <div class="flex flex-row gap-3">
+                        <p>{{ schedule.start_time }} - {{ schedule.end_time }}</p>
+                        <p>Duração Aten.: {{ schedule.duration }}</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <Button variant="outline" @click="deleteSchedule(schedule.id)"><Trash /></Button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>

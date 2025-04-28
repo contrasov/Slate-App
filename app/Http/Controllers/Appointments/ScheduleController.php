@@ -34,15 +34,23 @@ class ScheduleController extends Controller
         
         foreach ($request->work_times as $workTime) {
             $data = [
-                'user_id' => auth()->id(),  /* verificar isso depois / possivel error?  */
+                'user_id' => auth()->id(),  /* verificar isso depois  */
                 'weekday' => $workTime['weekday'],
                 'start_time' => $workTime['start_time'],
                 'end_time' => $workTime['end_time'],
                 'duration' => $request->duration
             ];
-            $scheduleService->createSchedules($data);
+            $scheduleService->createSchedule($data);
         }
 
         return back()->with('success', 'Horários salvos com sucesso!');
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $scheduleService = new ScheduleService(new ScheduleRepository());
+        $scheduleService->deleteSchedule($id);
+
+        return back()->with('success', 'Horário deletado com sucesso!');
     }
 }

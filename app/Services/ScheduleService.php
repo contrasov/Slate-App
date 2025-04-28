@@ -19,15 +19,15 @@ class ScheduleService {
         return $this->scheduleRepository->find($id);
     }
 
-    public function createSchedules(array $data) {
+    public function createSchedule(array $data) {
         return $this->scheduleRepository->create($data);
     }
 
-    public function updateSchedules($id, array $data) {
+    public function updateSchedule($id, array $data) {
         return $this->scheduleRepository->update($id, $data);
     }
 
-    public function deleteSchedules($id) {
+    public function deleteSchedule($id) {
         return $this->scheduleRepository->delete($id);
     }
 

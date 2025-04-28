@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
-
 import DeleteUser from '@/components/DeleteUser.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
@@ -29,7 +28,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
 const schedules = page.props.schedules as Array<{ id: number; weekday: number; start_time: string; end_time: string; duration: string }>;
-
 
 const form = useForm({
     name: user.name,
