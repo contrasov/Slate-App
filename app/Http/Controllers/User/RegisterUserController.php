@@ -7,8 +7,9 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
-
+use App\Models\User;
 
 class RegisterUserController extends Controller
 {
@@ -31,11 +32,16 @@ class RegisterUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        do {
+            $token = Str::random(6);
+        } while (User::where('schedule_token', $token)->exists());
+
         $user = $this->userService->create([
             'name' => $request->name,
             'email' => $request->email,
             'role' => 'médico',
             'password' => $request->password,
+            'schedule_token' => $token
         ]);
 
         return redirect()->route('login');

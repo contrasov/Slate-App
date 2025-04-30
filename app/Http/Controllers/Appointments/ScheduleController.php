@@ -8,16 +8,13 @@ use Inertia\Inertia;
 use App\Models\User;
 use App\Services\ScheduleService;
 use App\Repositories\Eloquent\ScheduleRepository;
+use Illuminate\Support\Facades\Auth;
 
 
 class ScheduleController extends Controller
 {
     public function show(Request $request){
         return Inertia::render('appointments/Schedule');
-    }
-
-    public function schedule(Request $rquest){
-        return Inertia::render('appointments/PublicSchedule');
     }
 
     public function store(Request $request)
@@ -34,7 +31,7 @@ class ScheduleController extends Controller
         
         foreach ($request->work_times as $workTime) {
             $data = [
-                'user_id' => auth()->id(),  /* verificar isso depois  */
+                'user_id' => Auth::id(),
                 'weekday' => $workTime['weekday'],
                 'start_time' => $workTime['start_time'],
                 'end_time' => $workTime['end_time'],

@@ -16,7 +16,6 @@ const delegatedProps = computed(() => {
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
-
 const weekDaysPtBr = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']; // Dom, Seg, Ter, Qua, Qui, Sex, Sab
 
 const getWeekDaysPtBr = (weekDays: string[]) => {
@@ -58,6 +57,7 @@ const getWeekDaysPtBr = (weekDays: string[]) => {
               <CalendarCellTrigger
                 :day="weekDate"
                 :month="month.value"
+                @click="emits('update:modelValue', weekDate)"
               />
             </CalendarCell>
           </CalendarGridRow>

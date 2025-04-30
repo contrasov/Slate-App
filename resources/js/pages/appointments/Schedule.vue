@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
+import { toast } from 'vue-sonner';
+import { type SharedData, type User } from '@/types';
+
+const page = usePage<SharedData>();
+const user = page.props.auth.user as User;
+
+const copylink = () => {
+    const link = route('schedule.public', { token: user.schedule_token });
+    navigator.clipboard.writeText(link);
+}
 </script>
 
 <template>
@@ -10,7 +20,21 @@ import { Button } from '@/components/ui/button';
         <div class="flex bg-sidebar h-full flex-1 flex-col gap-4 p-4">
             <div class="flex justify-between items-center">
                 <h1 class="font-bold" >Agenda de Consultas</h1>
-                <Button variant="scheduleLink">Copiar link</Button>
+                <div>
+                    <Button
+                        variant="scheduleLink" @click="() => {
+                        toast('Link copiado para a área de transferência', {
+                            action: {
+                            label: 'Fechar',
+                            onClick: () => console.log('Fechar'),
+                            },
+                        }),
+                        copylink();
+                        }"
+                    >
+                        Copiar link
+                    </Button>
+                </div>
             </div>
             <div class="relative min-h-[100vh] bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
                 <PlaceholderPattern />
