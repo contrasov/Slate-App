@@ -8,16 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('patient', function (Blueprint $table) {
+        Schema::create('patients', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('phone');
-            $table->string('email');
-            $table->string('address');
-            $table->string('city');
-            $table->string('cep_code');
-            $table->string('state');
-            $table->text('note');
+            $table->string('email')->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('cep_code')->nullable();
+            $table->string('state')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

@@ -5,10 +5,25 @@ namespace App\Http\Controllers\Patients;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Services\PatientService;
+
 
 class PatientsController extends Controller
 {
-    public function create(Request $request){
-        return Inertia::render('patients/Patients');
+    protected $patientService;
+
+    public function __construct(PatientService $patientService)
+    {
+        $this->patientService = $patientService;
     }
+
+    public function create(Request $request)
+    {
+        $patients = $this->patientService->getAllPatients();
+        return Inertia::render('patients/Patients', [
+            'patients' => $patients
+        ]);
+    }
+
+
 }

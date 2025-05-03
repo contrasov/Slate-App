@@ -20,6 +20,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
+const appointments = page.props.appointments as Array<{ id: number, patient: {id: number; name: string}, appointment_time: string, appointment_date: string, status: string, phone: string }>;
+
 
 </script>
 
@@ -44,7 +46,7 @@ const user = page.props.auth.user as User;
                 </div>
             </div>
             <div class="relative min-h-[100vh] bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
-                <DataTableHome/>
+                <DataTableHome :appointments="appointments"/>
             </div>
         </div>
     </AppLayout>

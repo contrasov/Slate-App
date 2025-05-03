@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import type {
-  ColumnDef,
-  ColumnFiltersState,
-  ExpandedState,
-  SortingState,
-  VisibilityState,
-} from '@tanstack/vue-table'
 import {
   Table,
   TableBody,
@@ -14,58 +7,39 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import {
-  FlexRender,
-  getCoreRowModel,
-  getExpandedRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useVueTable,
-} from '@tanstack/vue-table'
+import { defineProps } from 'vue';
+import { Button } from '@/components/ui/button';
 
-const appointments = [
-  {
-    id: 1,
-    horario: '08:00',
-    nome: 'João Silva Santos',
-    telefone: '(11) 99999-9999',
-    status: 'Confirmado'
-  },
-  {
-    id: 2,
-    horario: '09:30',
-    nome: 'Maria Oliveira Costa',
-    telefone: '(11) 98888-8888',
-    status: 'Pendente'
-  },
-  {
-    id: 3,
-    horario: '11:00',
-    nome: 'Pedro Almeida Lima',
-    telefone: '(11) 97777-7777',
-    status: 'Confirmado'
-  },
-  {
-    id: 4,
-    horario: '14:00',
-    nome: 'Ana Pereira Souza',
-    telefone: '(11) 96666-6666',
-    status: 'Cancelado'
-  }
-]
+const props = defineProps<{
+  appointments: Array<{ id: number, patient: {id: number; name: string}, appointment_time: string, appointment_date: string, status: string, phone: string }>;
+}>();
+
+const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString('pt-BR');
+}
+
+const formatTime = (time: string) => {
+  const [hours, minutes] = time.split(':');
+  return `${hours}:${minutes}h`;
+}
+
+const formatPhone = (phone: string) => {
+  return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+}
+
 
 </script>
 
 <template>
     <div class="flex flex-col p-4 gap-3">
         <div>
-            <h1 class="font-medium">Consultas para hoje</h1>
+            <h1 class="font-medium">Proximas consultas</h1>
         </div>
         <Table>
             <TableHeader>
                 <TableRow>
                     <TableHead>Horário</TableHead>
+                    <TableHead>Data</TableHead>
                     <TableHead>Nome completo</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Telefone</TableHead>
@@ -74,11 +48,16 @@ const appointments = [
             </TableHeader>
             <TableBody>
                 <TableRow v-for="appointment in appointments" :key="appointment.id">
-                    <TableCell>{{ appointment.horario }}</TableCell>
-                    <TableCell>{{ appointment.nome }}</TableCell>
+                    <TableCell>{{ formatTime(appointment.appointment_time) }}</TableCell>
+                    <TableCell>{{ formatDate(appointment.appointment_date) }}</TableCell>
+                    <TableCell>{{ appointment.patient.name }}</TableCell>
                     <TableCell>{{ appointment.status }}</TableCell>
-                    <TableCell>{{ appointment.telefone }}</TableCell>
-                    <TableCell>...</TableCell>
+                    <TableCell>{{ formatPhone(appointment.phone) }}</TableCell>
+                    <TableCell>
+                        <Button size="sm" variant="filter">
+                          Ver mais
+                        </Button>
+                    </TableCell>
                 </TableRow>
             </TableBody>
         </Table>

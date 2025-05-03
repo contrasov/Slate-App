@@ -9,20 +9,24 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('patient_appointment', function (Blueprint $table) {
+        Schema::create('appointments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')
+                  ->constrained()
+                  ->onDelete('cascade');
             $table->foreignId('patient_id')
-                  ->constrained('patient')
+                  ->constrained('patients')
                   ->onDelete('cascade');
             $table->time('appointment_time');
             $table->enum('status', ['Pendente', 'Confirmado', 'A Confirmar' , 'Cancelado', 'Finalizado', 'Não Compareceu']);
             $table->date('appointment_date');
+            $table->string('phone');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('patient_appointment');
+        Schema::dropIfExists('appointments');
     }
 };

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('user_id')
                   ->constrained() /* vazio laravel ja entende que é user */
                   ->onDelete('cascade');
-            $table->tinyInteger('weekday');   /* armazena dia da semaan [0..6] */
+            $table->tinyInteger('weekday'); 
             $table->time('start_time'); 
             $table->time('end_time');
             $table->time('duration');

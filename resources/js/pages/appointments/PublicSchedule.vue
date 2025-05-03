@@ -24,6 +24,7 @@ const props = defineProps<{
 }>();
 
 console.log('Schedules: ', props.schedules);
+console.log('User ID:', props.user.id);
 const selectedDate = ref<DateValue | undefined>(undefined);
 const selectedTime = ref<string | null>(null);
 const availableTimes = ref<string[]>([]);
@@ -85,7 +86,7 @@ const dateSelect = (date: DateValue | undefined) => {
 
 const timeSelect = (time: string) => {
     selectedTime.value = time;
-    form.time = time;
+    form.schedule_time = time;
 }
 
 const submit = () => {
@@ -94,15 +95,12 @@ const submit = () => {
         return;
     }
 
-    form.post(route('appointments.store'), {
+    form.post(route('schedule.public.create', { token: props.user.schedule_token }), {
         onSuccess: () => {
             form.reset();
             selectedDate.value = undefined;
             selectedDate.value = undefined;
             alert('Agendamento realizado com sucesso!');
-        },
-        onError: (errors) => {
-            alert('Erro ao agendar. Por favor, tente novamente.');
         }
     });
 }
@@ -112,7 +110,7 @@ const form = useForm({
     name: '',
     phone: '',
     date: '',
-    time: '',
+    schedule_time: '',
     weekday: 0,
 })
 

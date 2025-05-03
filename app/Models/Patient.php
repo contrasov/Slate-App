@@ -8,6 +8,7 @@ class Patient extends Model
 {
     protected $fillable = [
         'name',
+        'user_id',
         'phone',
         'email',
         'address',
@@ -16,5 +17,9 @@ class Patient extends Model
         'state',
         'note',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
 }

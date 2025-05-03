@@ -79,6 +79,7 @@ export default {
                 'darkTextPrincipal1': '#212223',
                 'greenPrincipal1' : '#1DD496',
                 'stroke1': '#E9E8E8',
+                'stroke2': 'E8E8E8',
                 'icon-secondary-light': '#787676'
             },
         },

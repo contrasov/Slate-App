@@ -19,7 +19,6 @@ class SettingsUserController extends Controller
     public function profile(Request $request)
     {
         $userSchedules = $this->scheduleService->getAllSchedules();
-
         return Inertia::render('settings/Profile', [
             'schedules' => $userSchedules // Passar as schedules para a view
         ]);
