@@ -2,11 +2,15 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
-import { toast } from 'vue-sonner';
+/* import { toast } from 'vue-sonner'; */
+import { useToast } from '@/components/ui/toast'
 import { type SharedData, type User } from '@/types';
 
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
+
+
+const { toast } = useToast();
 
 const copylink = () => {
     const link = route('schedule.public', { token: user.schedule_token });
@@ -23,12 +27,10 @@ const copylink = () => {
                 <div>
                     <Button
                         variant="scheduleLink" @click="() => {
-                        toast('Link copiado para a área de transferência', {
-                            action: {
-                            label: 'Fechar',
-                            onClick: () => console.log('Fechar'),
-                            },
-                        }),
+                        toast({
+                            title: 'Link copiado',
+                            variant: 'defaultSlate'
+                        })
                         copylink();
                         }"
                     >

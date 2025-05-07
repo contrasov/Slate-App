@@ -11,7 +11,7 @@ const props = defineProps<ToasterProps>()
     :toast-options="{
       classes: {
         toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
-        description: 'group-[.toast]:text-muted-foreground',
+        description: 'group-[.toast]:text-muted-foregroundb',
         actionButton:
           'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
         cancelButton:

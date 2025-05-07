@@ -20,9 +20,16 @@ const forwardedProps = useForwardProps(delegatedProps)
 
 const isAvailable = (day: DateValue) => {
   const jsDate = new Date(day.toString());
+  const currentDate = new Date();
+  
+  if (jsDate <= currentDate){
+    return false;
+  }
+  
   const weekday = jsDate.getDay();
   return props.availableDays.includes(weekday);
 };
+
 </script>
 
 <template>

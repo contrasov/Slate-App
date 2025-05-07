@@ -4,7 +4,6 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { type SharedData, type User } from '@/types';
 import { usePage } from '@inertiajs/vue3';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
 import DataTableHome from '@/components/DataTableHome.vue';
 import Attendance from '@/components/kpis/Attendance.vue';
 import Consultations from '@/components/kpis/Consultations.vue';

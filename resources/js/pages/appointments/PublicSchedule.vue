@@ -7,6 +7,10 @@ import { CalendarDays, Clock } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { DateValue } from '@internationalized/date';
+import { useToast } from '@/components/ui/toast';
+import Toaster from '@/components/ui/toast/Toaster.vue'
+
+const {toast} = useToast();
 
 const props = defineProps<{
     user: {
@@ -105,7 +109,11 @@ const timeSelect = (time: string) => {
 
 const submit = () => {
     if (!selectedDate.value || !selectedTime.value) {
-        alert('Por favor, selecione uma data e um horário'); /* trocar para um toast */
+        toast({
+            title: 'Erro',
+            description: 'Não é permitido deixar o campo vazio',
+            variant: 'destructive'
+        });
         return;
     }
 
@@ -114,7 +122,11 @@ const submit = () => {
             form.reset();
             selectedDate.value = undefined;
             selectedDate.value = undefined;
-            alert('Agendamento realizado com sucesso!');
+            toast({
+                title: 'Agendamento realizado',
+                description: 'Seu agendamento foi realizado com sucesso. Eles entrarão em contato em breve.',
+                variant: 'defaultSlate'
+            });
         }
     });
 }
@@ -147,15 +159,15 @@ const form = useForm({
                     :availableDays="availableDays"
                     />
                     <div class="flex flex-col gap-2 w-full p-4">
-                        <h1>Horários disponíveis:</h1>
+                        <h1>Horarios disponíveis</h1>
                         <Button
-                            v-for="time in availableTimes"
-                            :key="time"
-                            variant="slateDefault"
-                            @click="timeSelect(time)"
-                            :class="{ 'bg-primary' : selectedTime == time }"
+                        v-for="time in availableTimes"
+                        :key="time"
+                        variant="slateTime"
+                        @click="timeSelect(time)"
+                        :class="{ 'bg-[#0db97f] border-none text-white' : selectedTime == time }"
                             >
-                            {{ time }}
+                            {{ time }} 
                         </Button>
                     </div>
                 </div>
@@ -177,15 +189,27 @@ const form = useForm({
                     
                     <div class="grid gap-2">
                         <label class="text-sm" for="name">Nome completo</label>
-                        <Input v-model="form.name" required />
+                        <Input v-model="form.name" 
+                        required 
+                        placeholder="Alvaro George Veras dos Santos"
+                        />
                     </div>
 
                     <div class="grid gap-2">
                         <label class="text-sm" for="phone">Número para contato (Whatsapp)</label>
-                        <Input v-model="form.phone" @keypress="(event: KeyboardEvent) => !/[0-9]/.test(event.key) && event.preventDefault()" required type="tel" />
+                        <Input 
+                        v-model="form.phone" 
+                        @keypress="(event: KeyboardEvent) => !/[0-9]/.test(event.key) && event.preventDefault()" 
+                        required type="tel" 
+                        maxlength="11" 
+                        placeholder="88998462350"
+                        />
                     </div>
 
-                    <Button variant="slateDefault" @click="submit">Confirmar Agendamento</Button>
+                    <Button variant="slateDefault" 
+                    @click="submit" 
+                    >Confirmar Agendamento</Button>
+                    <Toaster/>
                 </div>
             </div>
         </main>

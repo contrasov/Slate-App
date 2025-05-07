@@ -14,6 +14,7 @@ export const buttonVariants = cva(
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'text-primary underline-offset-4 hover:underline',
                 slateDefault: 'bg-[#0DB97F] hover:bg-[#00929D] text-white',
+                slateTime: 'hover:bg-[#0db97f] hover:border-none hover:text-white text-black border border-black',
                 scheduleLink: 'border border-greenPrincipal1 text-greenPrincipal1 hover:bg-greenPrincipal1 hover:text-white',
                 filter: 'text-black border border-input',
             },
