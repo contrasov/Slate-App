@@ -21,16 +21,27 @@ class SchedulePublicController extends Controller
         $this->appointmentService = $appointmentService;
     }
 
-    public function show($token){
+    public function show($token, Request $request) {
         $user = User::where('schedule_token', $token)->firstOrFail();
-
+    
         $scheduleService = new ScheduleService(new ScheduleRepository());
         $schedules = $scheduleService->getSchedulesByUserId($user->id);
-
+    
+        $date = $request->input('date', now()->toDateString());
+    
+        $appointments = $this->appointmentService->getAppointmentsByDate();
+    
         return Inertia::render('appointments/PublicSchedule', [
             'user' => $user,
-            'schedules' => $schedules
+            'schedules' => $schedules,
+            'appointments' => $appointments->map(function($appointment) {
+                return [
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time
+                ];
+            })
         ]);
+
     }
 
     public function createAppointment(Request $request){

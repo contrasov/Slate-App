@@ -33,4 +33,9 @@ class AppointmentService {
     public function deleteAppointment($id) {
         return $this->appointmentRepository->delete($id);
     }
+
+    public function getAppointmentsByDate() {
+        return $this->appointmentRepository->all()
+        ->whereNotNull('appointment_time');
+    }
 }

@@ -17,11 +17,11 @@ import {
     SheetDescription,
     SheetTrigger,
 } from '@/components/ui/sheet'
-
-
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { defineProps } from 'vue';
+import { Trash2 } from 'lucide-vue-next';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps<{
     patients: any[]
@@ -29,6 +29,14 @@ const props = defineProps<{
 
 const formatPhone = (phone: string) => {
   return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+}
+
+const deletePatient = (id: number) => {
+    router.delete(route('patients.delete', { id }), {
+        onSuccess: () => {
+            console.log('Paciente deletado com sucesso');
+        }
+    });
 }
 </script>
 
@@ -72,15 +80,18 @@ const formatPhone = (phone: string) => {
                                                 Informações do paciente
                                             </SheetTitle>
                                         </SheetHeader>
-                                        <SheetDescription class="mt-4 flex flex-col gap-2">
+                                        <SheetDescription class="mt-2 flex flex-col gap-2">
                                             <div class="flex flex-col gap-2 border border-sidebar-border p-3 rounded-xl">
                                                 <h1>Nome do paciente</h1>
-                                                <p class="text-xl font-bold text-darkTextPrincipal1">{{patient.name}}</p>
+                                                <span class="flex flex-row gap-2 items-center justify-between">
+                                                    <p class="text-xl font-bold text-darkTextPrincipal1">{{patient.name}}</p>
+                                                    <Trash2 @click="deletePatient(patient.id)" class="w-4 h-4 hover:text-red-500 cursor-pointer" />
+                                                </span>
                                             </div>
 
                                             <h1 class="text-lg font-bold text-darkTextPrincipal1">Informações gerais</h1>
-                                            <div class="flex flex-row gap-6">
-                                                <div class="flex flex-col gap-4">
+                                            <div class="flex flex-col gap-6 px-5">
+                                                <div class="flex flex-row gap-6 justify-between">
                                                     <div class="flex flex-col gap-2">
                                                         <h1>Gênero</h1>
                                                         <p class="text-darkTextPrincipal1">{{patient.gender || 'Neutro' }}</p>
@@ -90,22 +101,21 @@ const formatPhone = (phone: string) => {
                                                         <p class="text-darkTextPrincipal1">{{patient.birth_date || '06/06/2025' }}</p>
                                                     </div>
                                                     <div class="flex flex-col gap-2">
-                                                        <h1>Endereço *</h1>
-                                                        <p class="text-darkTextPrincipal1">{{patient.address || 'Rua exemplo, 123, Russas - CE' }}</p>
+                                                        <h1>E-mail</h1>
+                                                        <p class="text-darkTextPrincipal1">{{patient.email || 'exemplo@email.com' }}</p>
                                                     </div>
                                                 </div>
-                                                <div class="flex flex-col gap-4">
+                                                <div class="flex flex-row gap-[46px]">
                                                     <div class="flex flex-col gap-2">
                                                         <h1>Telefone</h1>
                                                         <p class="text-darkTextPrincipal1">{{patient.phone || 'Não cadastrado' }}</p>
                                                     </div>
                                                     <div class="flex flex-col gap-2">
-                                                        <h1>E-mail</h1>
-                                                        <p class="text-darkTextPrincipal1">{{patient.email || 'exemplo@email.com' }}</p>
+                                                        <h1>Endereço *</h1>
+                                                        <p class="text-darkTextPrincipal1">{{patient.address || 'Rua exemplo, 123, Russas - CE' }}</p>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </SheetDescription>
                                     </SheetContent>
                                 </Sheet>

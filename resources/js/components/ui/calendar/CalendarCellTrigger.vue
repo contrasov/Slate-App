@@ -3,8 +3,12 @@ import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { CalendarCellTrigger, type CalendarCellTriggerProps, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
+import { DateValue } from '@internationalized/date'
 
-const props = defineProps<CalendarCellTriggerProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<CalendarCellTriggerProps & { 
+  class?: HTMLAttributes['class']; 
+  availableDays: number[];
+}>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
@@ -13,6 +17,12 @@ const delegatedProps = computed(() => {
 })
 
 const forwardedProps = useForwardProps(delegatedProps)
+
+const isAvailable = (day: DateValue) => {
+  const jsDate = new Date(day.toString());
+  const weekday = jsDate.getDay();
+  return props.availableDays.includes(weekday);
+};
 </script>
 
 <template>
@@ -20,6 +30,7 @@ const forwardedProps = useForwardProps(delegatedProps)
     :class="cn(
       buttonVariants({ variant: 'ghost' }),
       'h-10 w-10 p-0 font-normal',
+      { 'border-2 border-green-500/30': isAvailable(day) },
       '[&[data-today]:not([data-selected])]:bg-greenPrincipal1/20 [&[data-today]:not([data-selected])]:text-accent-foreground',
       // Selected
       'data-[selected]:bg-greenPrincipal1 data-[selected]:text-white data-[selected]:hover:bg-primary data-[selected]:hover:text-primary-foreground data-[selected]:focus:bg-greenPrincipal1 data-[selected]:focus:text-primary-foreground',

@@ -18,6 +18,9 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])
         ->name('dashboard');
+
+    Route::delete('patients/{id}', [PatientsController::class, 'delete'])
+        ->name('patients.delete');
 });
 
 /* fichas */

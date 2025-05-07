@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Appointments\SchedulePublicController;
 use App\Http\Controllers\Appointments\ScheduleController;
+use App\Http\Controllers\Patients\PatientsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('schedule-public/{token}', [SchedulePublicController::class, 'show'])
@@ -10,7 +11,7 @@ Route::get('schedule-public/{token}', [SchedulePublicController::class, 'show'])
 Route::post('schedule-public/{token}', [SchedulePublicController::class, 'createAppointment'])
     ->name('schedule.public.create');
 
-    Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function(){
     Route::get('schedule', [ScheduleController::class, 'show'])
         ->name('schedule');
 

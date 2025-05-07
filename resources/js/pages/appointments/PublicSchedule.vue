@@ -6,7 +6,7 @@ import Input from '@/components/ui/input/Input.vue';
 import { CalendarDays, Clock } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import { CalendarDate, DateValue } from '@internationalized/date';
+import { DateValue } from '@internationalized/date';
 
 const props = defineProps<{
     user: {
@@ -21,36 +21,45 @@ const props = defineProps<{
         end_time: string;
         duration: string;
     }> | null;
+    appointments: Array<{
+        id: number;
+        appointment_time: string;
+        appointment_date: string;
+    }> | null;
 }>();
 
-console.log('Schedules: ', props.schedules);
-console.log('User ID:', props.user.id);
 const selectedDate = ref<DateValue | undefined>(undefined);
 const selectedTime = ref<string | null>(null);
 const availableTimes = ref<string[]>([]);
+const scheduledAppointments = ref<{ time: string; date: string }[]>([]);
+const availableDays = ref<number[]>([]);
+
+/* ele ja remove os horarios que ja existe em appointments  */
+if (props.appointments) {
+    scheduledAppointments.value = props.appointments.map(appointment => ({
+        time: appointment.appointment_time.slice(0, 5),
+        date: appointment.appointment_date
+    }));
+}
+
+const calculateAvailableDays = () => {
+    if (!props.schedules || !Array.isArray(props.schedules)) return; 
+    availableDays.value = props.schedules.map(schedule => schedule.weekday);
+}
+
+calculateAvailableDays();
 
 const calculateAvailableTimes = (date: DateValue) => {
     const jsDate = new Date(date.toString());
     const jsWeekday = jsDate.getDay();
     const systemWeekday = (jsWeekday) % 7;
     
-    console.log('Schedules disponíveis:', props.schedules);
-
-    if(!props.schedules || !Array.isArray(props.schedules)){
-        console.log('Nenhuma schedule disponivel');
-        availableTimes.value = [];
-        return;
-    }
-    
-    const schedule = props.schedules.find(s => s.weekday === systemWeekday);
+    const schedule = props.schedules?.find(s => s.weekday === systemWeekday);
 
     if(!schedule){
-        console.log('Nenhum horário encontrado para este dia');
         availableTimes.value = [];
         return;
     }
-
-    console.log('Horário encontrado:', schedule);
 
     const start = new Date(`2000-01-01T${schedule.start_time}`);
     const end = new Date(`2000-01-01T${schedule.end_time}`);
@@ -60,7 +69,16 @@ const calculateAvailableTimes = (date: DateValue) => {
     let current = start;
 
     while(current < end){
-        times.push(current.toTimeString().slice(0, 5));
+        const timeString = current.toTimeString().slice(0, 5);
+        
+        const isScheduled = scheduledAppointments.value.some(appointment => 
+            appointment.date === jsDate.toISOString().split('T')[0] && appointment.time === timeString
+        );
+
+        if (!isScheduled) {
+            times.push(timeString);
+        }
+        
         current.setMinutes(current.getMinutes() + duration);
     }
 
@@ -74,12 +92,8 @@ const dateSelect = (date: DateValue | undefined) => {
     const jsDate = new Date(date.toString());
     form.date = jsDate.toISOString().split('T')[0];
     
-    console.log('Data selecionada:', jsDate);
-    
     const jsWeekday = jsDate.getDay();
     form.weekday = (jsWeekday) % 7;
-    
-    console.log('Dia da semana (Sistema):', form.weekday);
     
     calculateAvailableTimes(date);
 };
@@ -91,7 +105,7 @@ const timeSelect = (time: string) => {
 
 const submit = () => {
     if (!selectedDate.value || !selectedTime.value) {
-        alert('Por favor, selecione uma data e um horário');
+        alert('Por favor, selecione uma data e um horário'); /* trocar para um toast */
         return;
     }
 
@@ -128,7 +142,10 @@ const form = useForm({
                     <h2 class="text-sm md:text-bm">Rua Endereço do local do estabelecimento, algum canto ai, 990099-399, Russas-CE</h2>
                 </div>
                 <div class="bg-white flex md:flex-row flex-col h-fit rounded-xl border border-sidebar-border">
-                    <Calendar @update:modelValue="dateSelect" />
+                    <Calendar 
+                    @update:modelValue="dateSelect" 
+                    :availableDays="availableDays"
+                    />
                     <div class="flex flex-col gap-2 w-full p-4">
                         <h1>Horários disponíveis:</h1>
                         <Button
@@ -165,7 +182,7 @@ const form = useForm({
 
                     <div class="grid gap-2">
                         <label class="text-sm" for="phone">Número para contato (Whatsapp)</label>
-                        <Input v-model="form.phone" required type="tel" />
+                        <Input v-model="form.phone" @keypress="(event: KeyboardEvent) => !/[0-9]/.test(event.key) && event.preventDefault()" required type="tel" />
                     </div>
 
                     <Button variant="slateDefault" @click="submit">Confirmar Agendamento</Button>

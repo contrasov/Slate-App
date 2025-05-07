@@ -25,5 +25,11 @@ class PatientsController extends Controller
         ]);
     }
 
+    public function delete(Request $request)
+    {
+        $this->patientService->deletePatient($request->id);
+        return to_route('patients');
+    }
+
 
 }
