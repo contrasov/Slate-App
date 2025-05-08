@@ -16,6 +16,9 @@ Route::middleware(['auth'])->group(function(){
     Route::get('patients', [PatientsController::class, 'create'])
         ->name('patients');
 
+    Route::get('patients/{id}', [PatientsController::class, 'showServicePatient'])
+        ->name('patients.service');
+
     Route::get('dashboard', [DashboardController::class, 'dashboard'])
         ->name('dashboard');
 

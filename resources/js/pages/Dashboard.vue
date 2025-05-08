@@ -19,7 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
-const appointments = page.props.appointments as Array<{ id: number, patient: {id: number; name: string}, appointment_time: string, appointment_date: string, status: string, phone: string }>;
+const appointments = page.props.appointments as Array<{ id: number, patient: {id: number; name: string}, appointment_time: string, appointment_date: string, patient_id: number, status: string, phone: string }>;
 
 
 </script>

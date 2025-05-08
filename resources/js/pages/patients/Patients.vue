@@ -20,9 +20,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { defineProps } from 'vue';
-import { Trash2 } from 'lucide-vue-next';
+import { Trash2, Ellipsis } from 'lucide-vue-next';
 import { router } from '@inertiajs/vue3';
-
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import TabHistory from '@/components/TabHistory.vue';
 const props = defineProps<{
     patients: any[]
 }>();
@@ -39,6 +46,7 @@ const deletePatient = (id: number) => {
     });
 }
 </script>
+
 
 <template>
     <AppLayout>
@@ -70,7 +78,9 @@ const deletePatient = (id: number) => {
                             <TableCell>{{patient.email || 'Não cadastrado'}}</TableCell>
                             <TableCell>{{patient.birth_date || 'Não cadastrado'}}</TableCell>
                             <TableCell>
-                                <Sheet>
+
+                                <!-- sheet -->
+                                <Sheet class="bg-sidebar">
                                     <SheetTrigger as-child>
                                         <Button size="sm" variant="filter">Ver mais</Button>
                                     </SheetTrigger>
@@ -81,38 +91,61 @@ const deletePatient = (id: number) => {
                                             </SheetTitle>
                                         </SheetHeader>
                                         <SheetDescription class="mt-2 flex flex-col gap-2">
-                                            <div class="flex flex-col gap-2 border border-sidebar-border p-3 rounded-xl">
-                                                <h1>Nome do paciente</h1>
-                                                <span class="flex flex-row gap-2 items-center justify-between">
-                                                    <p class="text-xl font-bold text-darkTextPrincipal1">{{patient.name}}</p>
-                                                    <Trash2 @click="deletePatient(patient.id)" class="w-4 h-4 hover:text-red-500 cursor-pointer" />
-                                                </span>
+                                            <div class="flex flex-row justify-between items-center rounded-md py-3">
+                                                <h1 class="text-xl font-bold text-darkTextPrincipal1">{{patient.name}}</h1>
+                                                <div class="flex flex-row gap-4 items-center">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger as-child>
+                                                            <Ellipsis class="text-gray-400 cursor-pointer hover:text-greenPrincipal1"/>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent class="flex flex-col gap-2 p-2">
+                                                            <DropdownMenuItem class="cursor-pointer hover:bg-gray-100 py-1 px-2 rounded-md">Editar</DropdownMenuItem>
+                                                            <DropdownMenuItem @click="deletePatient(patient.id)" class="cursor-pointer hover:bg-gray-100 py-1 px-2 rounded-md">Excluir</DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                    <Button variant="slateDefault">Enviar Whatsapp</Button>
+                                                </div>
                                             </div>
 
-                                            <h1 class="text-lg font-bold text-darkTextPrincipal1">Informações gerais</h1>
-                                            <div class="flex flex-col gap-6 px-5">
-                                                <div class="flex flex-row gap-6 justify-between">
-                                                    <div class="flex flex-col gap-2">
-                                                        <h1>Gênero</h1>
-                                                        <p class="text-darkTextPrincipal1">{{patient.gender || 'Neutro' }}</p>
-                                                    </div>
-                                                    <div class="flex flex-col gap-2">
-                                                        <h1>Data de nascimento</h1>
-                                                        <p class="text-darkTextPrincipal1">{{patient.birth_date || '06/06/2025' }}</p>
-                                                    </div>
-                                                    <div class="flex flex-col gap-2">
-                                                        <h1>E-mail</h1>
-                                                        <p class="text-darkTextPrincipal1">{{patient.email || 'exemplo@email.com' }}</p>
-                                                    </div>
+                                            <div class="flex flex-row items-start justify-between">
+                                                <div class="w-[490px]">
+                                                    <TabHistory />
                                                 </div>
-                                                <div class="flex flex-row gap-[46px]">
+                                                <div class="flex flex-col gap-8 px-4 border-l border-sidebar-border w-[420px]">
                                                     <div class="flex flex-col gap-2">
-                                                        <h1>Telefone</h1>
-                                                        <p class="text-darkTextPrincipal1">{{patient.phone || 'Não cadastrado' }}</p>
+                                                        <h2 class="font-bold text-darkTextPrincipal1">Informações Pessoais</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <div class="flex flex-row gap-12 justify-between">
+                                                                <h3>E-mail</h3>
+                                                                <p class="text-darkTextPrincipal1">{{patient.email || 'Não cadastrado'}}</p>
+                                                            </div>
+    
+                                                            <div class="flex flex-row gap-12 justify-between">
+                                                                <h3>Telefone</h3>
+                                                                <p class="text-darkTextPrincipal1">{{formatPhone(patient.phone) || 'Não cadastrado'}}</p>
+                                                            </div>
+    
+                                                            <div class="flex flex-row gap-12 justify-between">
+                                                                <h3>Gênero</h3>
+                                                                <p class="text-darkTextPrincipal1">{{patient.gender || 'Não cadastrado'}}</p>
+                                                            </div>
+    
+                                                            <div class="flex flex-row gap-12 justify-between">
+                                                                <h3>Data de nascimento</h3>
+                                                                <p class="text-darkTextPrincipal1">{{patient.birth_date || 'Não cadastrado'}}</p>
+                                                            </div>
+    
+                                                            <div class="flex flex-row gap-12 justify-between">
+                                                                <h3>Endereço</h3>
+                                                                <p class="text-darkTextPrincipal1">{{patient.address || 'Não cadastrado'}}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="flex flex-col gap-2">
-                                                        <h1>Endereço *</h1>
-                                                        <p class="text-darkTextPrincipal1">{{patient.address || 'Rua exemplo, 123, Russas - CE' }}</p>
+
+                                                    <div class="flex flex-col gap-3">
+                                                        <h2 class="font-bold text-darkTextPrincipal1">Notas</h2>
+                                                        <textarea class="w-full h-[100px] border border-sidebar-border rounded-md p-2" placeholder="Digite uma nota para o paciente"></textarea>
+                                                        <Button variant="filter">Salvar nota</Button>
                                                     </div>
                                                 </div>
                                             </div>

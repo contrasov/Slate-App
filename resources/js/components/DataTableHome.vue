@@ -9,9 +9,10 @@ import {
 } from '@/components/ui/table'
 import { defineProps } from 'vue';
 import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps<{
-  appointments: Array<{ id: number, patient: {id: number; name: string}, appointment_time: string, appointment_date: string, status: string, phone: string }>;
+  appointments: Array<{ id: number, patient: {id: number; name: string}, appointment_time: string, appointment_date: string, patient_id: number, status: string, phone: string }>;
 }>();
 
 const formatDate = (date: string) => {
@@ -27,6 +28,7 @@ const formatPhone = (phone: string) => {
   return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
 }
 
+/* não sei se é o melhor */
 const statusStyle: { [key: string]: string } = {
   'A Confirmar': 'confimarStyle',
   'Confirmado': 'confirmadoStyle',
@@ -71,7 +73,8 @@ const statusStyle: { [key: string]: string } = {
                     </TableCell>
                     <TableCell>{{ formatPhone(appointment.phone) }}</TableCell>
                     <TableCell>
-                        <Button size="sm" variant="filter">
+                        <Button size="sm" variant="filter" @click="() => {
+                          router.visit(route('patients.service', { id: appointment.patient_id }))}">
                           Ver mais
                         </Button>
                     </TableCell>

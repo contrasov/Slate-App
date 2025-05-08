@@ -19,7 +19,7 @@ class AppointmentService {
 
     /* no sense talvez */
     public function getAppointmentsById($id) {  
-        return $this->appointmentRepository->find($id)->where('user_id', Auth::id());
+        return $this->appointmentRepository->find($id);
     }
 
     public function createAppointment(array $data) {

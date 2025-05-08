@@ -16,7 +16,11 @@ class PatientService {
     }
 
     public function getPatientsById($id) {
-        return $this->patientRepository->find($id)->where('user_id', Auth::id());
+        return $this->patientRepository->find($id);
+    }
+
+    public function findPatientId($column, $value) {
+        return $this->patientRepository->where($column, $value)->first();
     }
 
     public function createPatient(array $data) {

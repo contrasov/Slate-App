@@ -2,10 +2,9 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
-/* import { toast } from 'vue-sonner'; */
 import { useToast } from '@/components/ui/toast'
 import { type SharedData, type User } from '@/types';
-
+import ScheduleCalendar from '@/components/ScheduleCalendar.vue';
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
 
@@ -39,7 +38,7 @@ const copylink = () => {
                 </div>
             </div>
             <div class="relative min-h-[100vh] bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
-                <PlaceholderPattern />
+                <ScheduleCalendar />
             </div>
         </div>
     </AppLayout>

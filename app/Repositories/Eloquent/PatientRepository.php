@@ -30,6 +30,10 @@ class PatientRepository implements UserRepositoryInterface {
         return $patient;
     }
 
+    public function where($column, $value){
+        return $this->model->where($column, $value);
+    }
+
     public function delete($id){
         $patient = $this->find($id);
         return $patient->delete();
