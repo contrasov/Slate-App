@@ -16,8 +16,9 @@ import { Trash2, Pencil, Eye } from 'lucide-vue-next';
                 <Button variant="slateDefault"> <Plus class="h-4 w-4" /> Criar ficha</Button>
             </div>
             <div class="relative min-h-[100vh] flex-1 rounded-xl dark:border-sidebar-border md:min-h-min">
-                <div class="flex items-center gap-2 max-w-md mb-4"> <!-- vai bom mb mesmo -->
+                <div class="flex items-center gap-2 mb-4 justify-between">
                     <Input type="text" placeholder="Pesquisar ficha" />
+                    <Button variant="filter" class="h-10">Buscar</Button>
                 </div>
                 <div class="flex flex-col gap-2">
                     <h1 class="text-gray-400 text-xs" >123 fichas</h1>

@@ -27,6 +27,13 @@ const formatPhone = (phone: string) => {
   return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
 }
 
+const statusStyle: { [key: string]: string } = {
+  'A Confirmar': 'confimarStyle',
+  'Confirmado': 'confirmadoStyle',
+  'Cancelado': 'canceladoStyle',
+  'Finalizado': 'finalizadoStyle',
+  'Não Compareceu': 'naoCompareceuStyle'
+}
 
 </script>
 
@@ -51,7 +58,17 @@ const formatPhone = (phone: string) => {
                     <TableCell>{{ formatTime(appointment.appointment_time) }}</TableCell>
                     <TableCell>{{ formatDate(appointment.appointment_date) }}</TableCell>
                     <TableCell>{{ appointment.patient.name }}</TableCell>
-                    <TableCell>{{ appointment.status }}</TableCell>
+                    <TableCell>
+                     <p class="flex flex-row items-center gap-2" :class="statusStyle[appointment.status]">
+                          <span class="w-2 h-2 rounded-full"
+                          :class="{
+                            'bg-[#4A4AFF]': appointment.status === 'A Confirmar',
+                            'bg-green-500': appointment.status === 'Confirmado',
+                            'bg-red-500': appointment.status === 'Cancelado'
+                          }"
+                        ></span>
+                       {{ appointment.status }}</p>
+                    </TableCell>
                     <TableCell>{{ formatPhone(appointment.phone) }}</TableCell>
                     <TableCell>
                         <Button size="sm" variant="filter">

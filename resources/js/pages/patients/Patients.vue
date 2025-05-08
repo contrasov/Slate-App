@@ -46,9 +46,9 @@ const deletePatient = (id: number) => {
         <div class="flex bg-sidebar h-full flex-1 flex-col gap-4 p-4">
             <h1 class="font-bold" >Lista de Pacientes</h1>
             <div class="bg-white p-4 relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border md:min-h-min">
-                <div class="flex items-center gap-2 max-w-md mb-4"> <!-- vai bom mb mesmo -->
-                    <Input type="text" placeholder="Pesquisar paciente" />
-                    <Button class="h-10" variant="filter">Filtro*</Button>
+                <div class="flex items-center gap-2 mb-4 justify-between">
+                    <Input type="text" placeholder="Pesquisar ficha" />
+                    <Button variant="filter" class="h-10">Buscar</Button>
                 </div>
                 
                 <Table>

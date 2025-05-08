@@ -8,7 +8,7 @@ import Logo from '@/components/svg/Logo.vue'
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
-    <div class="flex min-h-screen justify-between gap-[20vh] flex-col items-center p-6 text-[#1b1b18] dark:bg-[#0a0a0a] lg:p-8 bg-[url('/public/images/background.svg')] bg-cover">
+    <div class="flex min-h-screen justify-between gap-[20vh] flex-col items-center py-4 px-12 text-[#1b1b18] dark:bg-[#0a0a0a] bg-[url('/public/images/background.svg')] bg-cover">
         <header class="w-full flex flex-row items-center justify-between text-sm bg-white py-2 px-3 rounded-[20px] shadow-xl">
 
             <Logo class="h-12" />
