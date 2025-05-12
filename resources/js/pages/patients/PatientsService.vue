@@ -6,6 +6,7 @@ import { ChevronDown, ArrowLeft, ClipboardPlus } from 'lucide-vue-next';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { router } from '@inertiajs/vue3';
 import TabHistory from '@/components/TabHistory.vue';
+import { usePage } from '@inertiajs/vue3';
 
 const props = defineProps<{
     patient: {
@@ -40,6 +41,19 @@ const formatPhone = (phone: string) => {
     return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
 }
 
+const page = usePage();
+const from = page.url.includes('from=schedule') ? 'schedule' : 'dashboard';
+
+const goBack = () => {
+  if (from === 'dashboard') {
+    router.visit(route('dashboard'));
+  } else if (from === 'schedule') {
+    router.visit(route('schedule'));
+  } else {
+    router.visit('/'); // fallback
+  }
+}
+
 </script>
 
 <template>
@@ -47,9 +61,7 @@ const formatPhone = (phone: string) => {
         <Head title="Atendimento" />
         <div class="flex bg-sidebar h-full flex-1 flex-col gap-4 p-4">
             <span class="flex flex-row gap-3 items-center">
-                <ArrowLeft class="w-4 h-4 cursor-pointer text-gray-400 hover:text-greenPrincipal1" @click="() => {
-                    router.visit(route('dashboard'));
-                }" />
+                <ArrowLeft class="w-4 h-4 cursor-pointer text-gray-400 hover:text-greenPrincipal1" @click="goBack()" />
                 <h1 class="text-[15px] text-darkTextPrincipal1 font-bold">Atendimento do paciente</h1>
                 <p class="flex flex-row items-center gap-2" :class="statusStyle[appointments.status]">
                           <span class="w-2 h-2 rounded-full"
@@ -107,10 +119,8 @@ const formatPhone = (phone: string) => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent class="w-44">
-                            <DropdownMenuItem>A Confirmar</DropdownMenuItem>
                             <DropdownMenuItem>Confirmado</DropdownMenuItem>
                             <DropdownMenuItem>Cancelado</DropdownMenuItem>
-                            <DropdownMenuItem>Finalizado</DropdownMenuItem>
                             <DropdownMenuItem>Não Compareceu</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

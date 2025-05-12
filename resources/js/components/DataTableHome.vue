@@ -16,7 +16,8 @@ const props = defineProps<{
 }>();
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('pt-BR');
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
 }
 
 const formatTime = (time: string) => {
@@ -74,7 +75,7 @@ const statusStyle: { [key: string]: string } = {
                     <TableCell>{{ formatPhone(appointment.phone) }}</TableCell>
                     <TableCell>
                         <Button size="sm" variant="filter" @click="() => {
-                          router.visit(route('patients.service', { id: appointment.patient_id }))}">
+                          router.visit(route('patients.service', { id: appointment.patient_id }) + '?from=dashboard' )}">
                           Ver mais
                         </Button>
                     </TableCell>

@@ -8,6 +8,15 @@ import ScheduleCalendar from '@/components/ScheduleCalendar.vue';
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
 
+const appointments = page.props.appointments as Array<{ 
+    id: number, 
+    patient: {id: number; name: string}, 
+    appointment_time: string, 
+    appointment_date: string, 
+    patient_id: number, 
+    status: string, 
+    phone: string 
+}>;
 
 const { toast } = useToast();
 
@@ -38,7 +47,7 @@ const copylink = () => {
                 </div>
             </div>
             <div class="relative min-h-[100vh] bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
-                <ScheduleCalendar />
+                <ScheduleCalendar :appointments="appointments"/>
             </div>
         </div>
     </AppLayout>

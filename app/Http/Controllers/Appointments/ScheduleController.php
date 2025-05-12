@@ -7,14 +7,31 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Services\ScheduleService;
+use App\Services\PatientService;
+use App\Services\AppointmentService;
 use App\Repositories\Eloquent\ScheduleRepository;
 use Illuminate\Support\Facades\Auth;
 
 
 class ScheduleController extends Controller
 {
+    protected $patientService;
+    protected $appointmentService;
+
+    public function __construct(PatientService $patientService, AppointmentService $appointmentService){
+        $this->patientService = $patientService;
+        $this->appointmentService = $appointmentService;
+    }
+
     public function show(Request $request){
-        return Inertia::render('appointments/Schedule');
+
+        $appointments = $this->appointmentService->getAppointmentsByDate()->load('patient');
+
+        /* return response()->json($appointments); */
+
+        return Inertia::render('appointments/Schedule', [
+            'appointments' => $appointments
+        ]);
     }
 
     public function store(Request $request)

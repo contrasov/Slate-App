@@ -113,4 +113,8 @@ html {
     .naoCompareceuStyle {
         @apply bg-[#ffede9] text-[#a71912] font-medium rounded-[10px] w-fit px-2;
     }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
 }

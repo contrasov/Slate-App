@@ -71,13 +71,6 @@ const submit = () => {
                     <InputError :message="form.errors.password" />
                 </div>
 
-                <div class="flex items-center justify-between" :tabindex="3">
-                    <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" v-model="form.remember" :tabindex="4" />
-                        <span>Mantenha-me conectado</span>
-                    </Label>
-                </div>
-
                 <Button variant="slateDefault" type="submit" class="mt-4" :tabindex="4" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Entrar

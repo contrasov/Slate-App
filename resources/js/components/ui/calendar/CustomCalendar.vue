@@ -6,13 +6,16 @@ import { CalendarCell, CalendarCellTrigger, CalendarGrid, CalendarGridBody, Cale
 
 const props = defineProps<CalendarRootProps & { 
   class?: HTMLAttributes['class']; 
-  availableDays: number[];
+  availableDays?: number[];
+  customHeadings?: string[];
+  disableDatesBeforeToday?: boolean;
+  customDayClass?: (date: any) => string | null;
 }>()
 
 const emits = defineEmits<CalendarRootEmits>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+  const { class: _, customHeadings: __, availableDays: ___, disableDatesBeforeToday: ____, customDayClass: _____, ...delegated } = props
 
   return delegated
 })
@@ -21,10 +24,38 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
 const weekDaysPtBr = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 
-const getWeekDaysPtBr = (weekDays: string[]) => {
+const getHeadings = (weekDays: string[]) => {
+  if (props.customHeadings && props.customHeadings.length === 7) {
+    return props.customHeadings;
+  }
+  
   return weekDays.map((day, index) => weekDaysPtBr[index]);
 }
 
+const isDateAvailable = (day: any) => {
+  if (!props.availableDays) return true;
+  
+  const jsDate = new Date(day.toString());
+  
+  if (props.disableDatesBeforeToday && jsDate <= new Date()) {
+    return false;
+  }
+  
+  const weekday = jsDate.getDay();
+  return props.availableDays.includes(weekday);
+};
+
+const getDayClass = (day: any) => {
+  if (props.customDayClass) {
+    return props.customDayClass(day);
+  }
+  
+  if (props.availableDays) {
+    return isDateAvailable(day) ? 'border-2 border-green-500/30' : '';
+  }
+  
+  return '';
+};
 </script>
 
 <template>
@@ -39,20 +70,21 @@ const getWeekDaysPtBr = (weekDays: string[]) => {
       <CalendarNextButton />
     </CalendarHeader>
 
-    <div class="flex flex-col gap-y-4 my-4 ">
+    <div class="flex flex-col h-[75vh]">
       <CalendarGrid v-for="month in grid" :key="month.value.toString()">
         <CalendarGridHead>
           <CalendarGridRow>
             <CalendarHeadCell
-              v-for="day in getWeekDaysPtBr(weekDays)" :key="day"
+              v-for="day in getHeadings(weekDays)" :key="day"
             >
               {{ day }}
             </CalendarHeadCell>
           </CalendarGridRow>
         </CalendarGridHead>
         <CalendarGridBody>
-          <CalendarGridRow v-for="(weekDates, index) in month.rows" :key="`weekDate-${index}`" class="mt-2 sm1:ml-[-7px] justify-between flex w-full">
+          <CalendarGridRow v-for="(weekDates, index) in month.rows" :key="`weekDate-${index}`" class="justify-between flex w-full">
             <CalendarCell
+              class="border h-[13vh] "
               v-for="weekDate in weekDates"
               :key="weekDate.toString()"
               :date="weekDate"
@@ -60,7 +92,8 @@ const getWeekDaysPtBr = (weekDays: string[]) => {
               <CalendarCellTrigger
                 :day="weekDate"
                 :month="month.value"
-                :availableDays="availableDays"
+                :availableDays="props.availableDays || []"
+                :class="getDayClass(weekDate)"
                 @click="emits('update:modelValue', weekDate)"
               />
             </CalendarCell>
@@ -69,4 +102,4 @@ const getWeekDaysPtBr = (weekDays: string[]) => {
       </CalendarGrid>
     </div>
   </CalendarRoot>
-</template>
+</template> 
