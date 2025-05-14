@@ -19,8 +19,21 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
-const appointments = page.props.appointments as Array<{ id: number, patient: {id: number; name: string}, appointment_time: string, appointment_date: string, patient_id: number, status: string, phone: string }>;
 
+const appointments = page.props.appointments as Array<{ 
+    id: number, 
+    patient: {
+        id: number; 
+        name: string
+    }, 
+    appointment_time: string, 
+    appointment_date: string, 
+    patient_id: number, 
+    status: string, 
+    phone: string 
+}>;
+
+const amountAppointments = page.props.amountAppointments as number;
 
 </script>
 
@@ -35,7 +48,7 @@ const appointments = page.props.appointments as Array<{ id: number, patient: {id
                     <Attendance />
                 </div>
                 <div class="bg-white p-4 relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <Consultations />
+                    <Consultations :amountAppointments="amountAppointments" />
                 </div>
                 <div class="bg-white p-4 relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                     <FormsCompleted />

@@ -24,6 +24,9 @@ Route::middleware(['auth'])->group(function(){
 
     Route::delete('patients/{id}', [PatientsController::class, 'delete'])
         ->name('patients.delete');
+
+    Route::post('patient/{id}/status', [ScheduleController::class, 'changeStatus'])
+        ->name('patient.status');
 });
 
 /* fichas */

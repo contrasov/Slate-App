@@ -18,9 +18,11 @@ class DashboardController extends Controller
     public function dashboard(Request $request)
     {
         $userAppointments = $this->appointmentService->getAllAppointments()->load('patient');  //retornar dados junto com tabela patient
-        
+        $amountAppointments = $userAppointments->count();
+
         return Inertia::render('Dashboard', [
-            'appointments' => $userAppointments
+            'appointments' => $userAppointments,
+            'amountAppointments' => $amountAppointments
         ]);
 
     }

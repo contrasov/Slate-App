@@ -24,7 +24,7 @@ import { NotepadText, Clipboard } from 'lucide-vue-next';
                 <h1 class="text-gray-400 text-sm">Dia: 07/05/2025</h1>
                 </div>
               </div>
-              <Button variant="filter">
+              <Button variant="outline">
                 <NotepadText class="w-4 h-4" />
                 Ver anotação
               </Button>
@@ -42,7 +42,7 @@ import { NotepadText, Clipboard } from 'lucide-vue-next';
                 <h1>Anamnese {{ index }}</h1>
                 <h2 class="text-gray-400 text-sm">07/05/2025</h2>
               </div>
-              <Button variant="filter">
+              <Button variant="outline">
                 <Clipboard class="w-4 h-4" />
                 Ver ficha
               </Button>

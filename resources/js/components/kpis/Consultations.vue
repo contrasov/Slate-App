@@ -80,6 +80,11 @@ const chartOptions = ref({
 const series = ref([{
     data: [[1, 4], [2, 15], [3, 8], [4, 34]]
 }]);
+
+const props = defineProps<{
+    amountAppointments: number;
+}>();
+
 </script>
 
 <template>
@@ -93,8 +98,7 @@ const series = ref([{
         </div>
 
         <div class="flex items-center gap-2">
-            <h1 class="text-[40px] font-bold">45</h1>
-            <span class="bg-green-100 text-green-600 px-1 py-1 rounded-md text-sm font-medium">+231</span>
+            <h1 class="text-[40px] font-bold">{{props.amountAppointments}}</h1>
         </div>
 
         <div class="h-16">

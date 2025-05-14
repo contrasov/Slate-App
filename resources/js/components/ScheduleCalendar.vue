@@ -125,8 +125,6 @@ const isSameDay = (dateStr: string, day: number | null) => {
             </div>
           </template>
         </div>
-
-
       </div>
     </div>
   </div>

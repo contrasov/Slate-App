@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Appointment;
 use App\Repositories\Eloquent\AppointmentRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,6 +27,17 @@ class AppointmentService {
 
     public function updateAppointment($id, array $data) {
         return $this->appointmentRepository->update($id, $data);
+    }
+
+    public function changeStatusAppointment($id, $status) {
+        $appointment = $this->appointmentRepository->find($id);
+        if ($appointment) {
+            $appointment->status = $status;
+            $appointment->save();
+            return $appointment;
+        }
+
+        return null;
     }
 
     public function deleteAppointment($id) {

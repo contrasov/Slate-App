@@ -101,7 +101,7 @@ const updatePassword = () => {
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <Button :disabled="form.processing">Salvar senha</Button>
+                        <Button variant="slateDefault" :disabled="form.processing">Salvar senha</Button>
 
                         <Transition
                             enter-active-class="transition ease-in-out"

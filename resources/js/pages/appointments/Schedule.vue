@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/toast'
 import { type SharedData, type User } from '@/types';
 import ScheduleCalendar from '@/components/ScheduleCalendar.vue';
+import WorkTime from '@/components/WorkTime.vue'
+
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
 
@@ -16,6 +18,14 @@ const appointments = page.props.appointments as Array<{
     patient_id: number, 
     status: string, 
     phone: string 
+}>;
+
+const schedules = page.props.schedules as Array<{ 
+    id: number; 
+    weekday: number; 
+    start_time: string; 
+    end_time: string; 
+    duration: string 
 }>;
 
 const { toast } = useToast();
@@ -46,7 +56,8 @@ const copylink = () => {
                     </Button>
                 </div>
             </div>
-            <div class="relative min-h-[100vh] bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
+            <WorkTime :schedules="schedules" class="bg-white p-4 rounded-md border border-sidebar-border" /> <!-- deixar aqui por enquanto -->
+            <div class="bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
                 <ScheduleCalendar :appointments="appointments"/>
             </div>
         </div>

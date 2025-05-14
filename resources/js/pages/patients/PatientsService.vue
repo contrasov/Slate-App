@@ -29,6 +29,18 @@ const props = defineProps<{
     };
 }>();
 
+function updateStatus(status: string) {
+  router.post(
+    route('patient.status', { id: props.appointments.id }),
+    { status },
+    {
+      onSuccess: () => {
+        window.location.reload();
+      }
+    }
+  );
+}
+
 const statusStyle: { [key: string]: string } = {
   'A Confirmar': 'confimarStyle',
   'Confirmado': 'confirmadoStyle',
@@ -50,7 +62,7 @@ const goBack = () => {
   } else if (from === 'schedule') {
     router.visit(route('schedule'));
   } else {
-    router.visit('/'); // fallback
+    router.visit('/');
   }
 }
 
@@ -67,8 +79,8 @@ const goBack = () => {
                           <span class="w-2 h-2 rounded-full"
                           :class="{
                             'bg-[#4A4AFF]': appointments.status === 'A Confirmar',
-                            'bg-green-500': appointments.status === 'Confirmado',
-                            'bg-red-500': appointments.status === 'Cancelado'
+                            'bg-green-500': appointments.status === 'Confirmado' || appointments.status === 'Finalizado',
+                            'bg-red-500': appointments.status === 'Cancelado' || appointments.status === 'Não Compareceu',
                           }"
                         ></span>
                        {{ appointments.status }}</p>
@@ -113,18 +125,18 @@ const goBack = () => {
                     </Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger as-child>
-                            <Button variant="filter" class="flex flex-row items-center justify-center gap-2">
+                            <Button variant="outline" class="flex flex-row items-center justify-center gap-2">
                                 Alterar Status
                                 <ChevronDown class="w-4 h-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent class="w-44">
-                            <DropdownMenuItem>Confirmado</DropdownMenuItem>
-                            <DropdownMenuItem>Cancelado</DropdownMenuItem>
-                            <DropdownMenuItem>Não Compareceu</DropdownMenuItem>
+                            <DropdownMenuItem  @click="() => updateStatus('Confirmado')" >Confirmado</DropdownMenuItem>
+                            <DropdownMenuItem @click="() => updateStatus('Cancelado')">Cancelado</DropdownMenuItem>
+                            <DropdownMenuItem @click="() => updateStatus('Não Compareceu')">Não Compareceu</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button variant="filter" >Encerrar Antedimento</Button>
+                    <Button @click="() => updateStatus('Finalizado')" variant="outline" >Encerrar Antedimento</Button>
                 </div>
 
             </div>

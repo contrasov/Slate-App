@@ -51,7 +51,7 @@ const getDayClass = (day: any) => {
   }
   
   if (props.availableDays) {
-    return isDateAvailable(day) ? 'border-2 border-green-500/30' : '';
+    return isDateAvailable(day) ? 'border-2 border-green-500/10' : '';
   }
   
   return '';
@@ -61,7 +61,7 @@ const getDayClass = (day: any) => {
 <template>
   <CalendarRoot
     v-slot="{ grid, weekDays }"
-    :class="cn('p-3', props.class)"
+    :class="cn('p-3 w-fit', props.class)"
     v-bind="forwarded"
   >
     <CalendarHeader>
@@ -70,21 +70,21 @@ const getDayClass = (day: any) => {
       <CalendarNextButton />
     </CalendarHeader>
 
-    <div class="flex flex-col h-[75vh]">
+    <div class="flex flex-col">
       <CalendarGrid v-for="month in grid" :key="month.value.toString()">
         <CalendarGridHead>
           <CalendarGridRow>
             <CalendarHeadCell
+              class="flex justify-center"
               v-for="day in getHeadings(weekDays)" :key="day"
             >
-              {{ day }}
+              {{ day }} 
             </CalendarHeadCell>
           </CalendarGridRow>
         </CalendarGridHead>
         <CalendarGridBody>
           <CalendarGridRow v-for="(weekDates, index) in month.rows" :key="`weekDate-${index}`" class="justify-between flex w-full">
             <CalendarCell
-              class="border h-[13vh] "
               v-for="weekDate in weekDates"
               :key="weekDate.toString()"
               :date="weekDate"

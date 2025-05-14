@@ -66,15 +66,15 @@ const statusStyle: { [key: string]: string } = {
                           <span class="w-2 h-2 rounded-full"
                           :class="{
                             'bg-[#4A4AFF]': appointment.status === 'A Confirmar',
-                            'bg-green-500': appointment.status === 'Confirmado',
-                            'bg-red-500': appointment.status === 'Cancelado'
+                            'bg-green-500': appointment.status === 'Confirmado' || appointment.status === 'Finalizado',
+                            'bg-red-500': appointment.status === 'Cancelado' || appointment.status === 'Não Compareceu'
                           }"
                         ></span>
                        {{ appointment.status }}</p>
                     </TableCell>
                     <TableCell>{{ formatPhone(appointment.phone) }}</TableCell>
                     <TableCell>
-                        <Button size="sm" variant="filter" @click="() => {
+                        <Button size="sm" variant="outline" @click="() => {
                           router.visit(route('patients.service', { id: appointment.patient_id }) + '?from=dashboard' )}">
                           Ver mais
                         </Button>

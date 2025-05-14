@@ -5,32 +5,37 @@ namespace App\Http\Controllers\Appointments;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\User;
 use App\Services\ScheduleService;
-use App\Services\PatientService;
 use App\Services\AppointmentService;
+use App\Services\FreeDayService;
 use App\Repositories\Eloquent\ScheduleRepository;
 use Illuminate\Support\Facades\Auth;
 
 
 class ScheduleController extends Controller
 {
-    protected $patientService;
+    protected $freeDayService;
+    protected $scheduleService;
     protected $appointmentService;
 
-    public function __construct(PatientService $patientService, AppointmentService $appointmentService){
-        $this->patientService = $patientService;
+    public function __construct(scheduleService $scheduleService, AppointmentService $appointmentService, FreeDayService $freeDayService){
+        $this->scheduleService = $scheduleService;
         $this->appointmentService = $appointmentService;
+        $this->freeDayService = $freeDayService;
     }
 
     public function show(Request $request){
 
         $appointments = $this->appointmentService->getAppointmentsByDate()->load('patient');
+        $schedules = $this->scheduleService->getAllSchedules();
+        $freeDays = $this->freeDayService->getAllFreeDays();
 
-        /* return response()->json($appointments); */
+        /* return response()->json($schedules); */
 
         return Inertia::render('appointments/Schedule', [
-            'appointments' => $appointments
+            'appointments' => $appointments,
+            'schedules' => $schedules,
+            'freeDays' => $freeDays
         ]);
     }
 
@@ -66,5 +71,20 @@ class ScheduleController extends Controller
         $scheduleService->deleteSchedule($id);
 
         return back()->with('success', 'Horário deletado com sucesso!');
+    }
+
+    public function changeStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|string|in: Pendente,Confirmado,A Confirmar,Cancelado,Finalizado,Não Compareceu',
+        ]);
+
+        $appointment = $this->appointmentService->changeStatusAppointment($id, $request->status);
+        
+        if(!$appointment) {
+            return response()->json(['Message' => 'Appointment not foun'], 404);
+        }
+
+        
     }
 }

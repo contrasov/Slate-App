@@ -27,7 +27,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
-const schedules = page.props.schedules as Array<{ id: number; weekday: number; start_time: string; end_time: string; duration: string }>;
 
 const form = useForm({
     name: user.name,
@@ -89,7 +88,7 @@ const submit = () => {
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <Button :disabled="form.processing">Salvar</Button>
+                        <Button variant="slateDefault" :disabled="form.processing">Salvar</Button>
 
                         <Transition
                             enter-active-class="transition ease-in-out"
@@ -103,7 +102,6 @@ const submit = () => {
                 </form>
             </div>
 
-            <WorkTime :schedules="schedules"/>
             <DeleteUser />
         </SettingsLayout>
     </AppLayout>

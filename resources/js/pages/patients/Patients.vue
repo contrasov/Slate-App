@@ -56,7 +56,7 @@ const deletePatient = (id: number) => {
             <div class="bg-white p-4 relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border md:min-h-min">
                 <div class="flex items-center gap-2 mb-4 justify-between">
                     <Input type="text" placeholder="Pesquisar ficha" />
-                    <Button variant="filter" class="h-10">Buscar</Button>
+                    <Button variant="outline" class="h-10">Buscar</Button>
                 </div>
                 
                 <Table>
@@ -82,7 +82,7 @@ const deletePatient = (id: number) => {
                                 <!-- sheet -->
                                 <Sheet class="bg-sidebar">
                                     <SheetTrigger as-child>
-                                        <Button size="sm" variant="filter">Ver mais</Button>
+                                        <Button size="sm" variant="outline">Ver mais</Button>
                                     </SheetTrigger>
                                     <SheetContent>
                                         <SheetHeader>
@@ -145,7 +145,7 @@ const deletePatient = (id: number) => {
                                                     <div class="flex flex-col gap-3">
                                                         <h2 class="font-bold text-darkTextPrincipal1">Notas</h2>
                                                         <textarea class="w-full h-[100px] border border-sidebar-border rounded-md p-2" placeholder="Digite uma nota para o paciente"></textarea>
-                                                        <Button variant="filter">Salvar nota</Button>
+                                                        <Button variant="outline">Salvar nota</Button>
                                                     </div>
                                                 </div>
                                             </div>
