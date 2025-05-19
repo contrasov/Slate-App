@@ -30,6 +30,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    schedule_token?: string;
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;

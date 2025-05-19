@@ -21,7 +21,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('login'), {
+    form.post(route('login.submit'), {
         onFinish: () => form.reset('password'),
     });
 };
@@ -36,7 +36,7 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit" class="flex flex-col gap-6 text-darkTextPrincipal1">
-            <div class="grid gap-6">
+            <div class="grid gap-4">
                 <div class="grid gap-2">
                     <Label for="e-mail">E-mail</Label>
                     <Input
@@ -71,14 +71,7 @@ const submit = () => {
                     <InputError :message="form.errors.password" />
                 </div>
 
-                <div class="flex items-center justify-between" :tabindex="3">
-                    <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" v-model="form.remember" :tabindex="4" />
-                        <span>Mantenha-me conectado</span>
-                    </Label>
-                </div>
-
-                <Button type="submit" class="mt-4 w-full bg-greenPrincipal1 hover:bg-[#00929D]" :tabindex="4" :disabled="form.processing">
+                <Button variant="slateDefault" type="submit" class="mt-4" :tabindex="4" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Entrar
                 </Button>
@@ -86,7 +79,7 @@ const submit = () => {
 
             <div class="text-center text-sm text-muted-foreground">
                 Ainda não tem uma conta?
-                <TextLink :href="route('register')" :tabindex="5">Criar conta</TextLink>
+                <TextLink :href="route('user.register')" :tabindex="5">Criar conta</TextLink>
             </div>
         </form>
     </AuthBase>

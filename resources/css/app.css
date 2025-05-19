@@ -89,4 +89,32 @@ html {
     body {
         @apply bg-background text-foreground;
     }
+
+    .confimarStyle {
+        @apply bg-[#E6E6F2] text-[#4A4AFF] font-medium rounded-[10px] w-fit px-2;
+    }
+
+    .pendenteStyle {
+        @apply bg-[#E6E6F2] text-[#4A4AFF] font-medium rounded-[10px] w-fit px-2;
+    }
+
+    .confirmadoStyle {
+        @apply bg-[#CDFFCD] text-[#007F00] font-medium rounded-[10px] w-fit px-2;
+    }
+
+    .canceladoStyle {
+        @apply bg-[#ffede9] text-[#a71912] font-medium rounded-[10px] w-fit px-2;
+    }
+
+    .finalizadoStyle {
+        @apply bg-[#CDFFCD] text-[#007F00] font-medium rounded-[10px] w-fit px-2;
+    }
+
+    .naoCompareceuStyle {
+        @apply bg-[#ffede9] text-[#a71912] font-medium rounded-[10px] w-fit px-2;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
 }
