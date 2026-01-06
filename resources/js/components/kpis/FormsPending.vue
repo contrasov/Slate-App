@@ -93,7 +93,7 @@ const series = ref([{
         </div>
 
         <div class="flex items-center gap-2">
-            <h1 class="text-[40px] font-bold">3</h1>
+            <h1 class="text-[40px] font-bold">0</h1>
         </div>
 
         <div class="h-16">

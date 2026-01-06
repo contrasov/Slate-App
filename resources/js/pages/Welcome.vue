@@ -20,12 +20,9 @@ import Doubts from '@/components/landing/Doubts.vue';
         <div class="w-full px-8">
             <header
                 class="fixed top-2 left-0 right-0 w-[97%] mx-auto flex flex-row items-center justify-between text-sm bg-white py-2 px-4 rounded-[20px] shadow-xl">
-
                 <Logo class="h-12" />
-
                 <ul class="flex flex-row gap-3 font-bold justify-center lg:pl-14 text-darkTextPrincipal1">
                     <li class="hover:underline cursor-pointer">Benefícios</li>
-                    <!-- <li class="hover:underline cursor-pointer">Planos</li> -->
                     <li class="hover:underline cursor-pointer">Experiências</li>
                     <li class="hover:underline cursor-pointer">Dúvidas</li>
                     <li class="hover:underline cursor-pointer">Suporte</li>
@@ -44,7 +41,7 @@ import Doubts from '@/components/landing/Doubts.vue';
             </header>
         </div>
 
-        <div class="border w-full flex flex-col items-center gap-24 justify-center text-darkTextPrincipal1">
+        <div class="w-full flex flex-col items-center gap-24 justify-center text-darkTextPrincipal1">
 
             <div class="flex flex-col items-center gap-4">
                 <h1 class="font-bold text-[64px] w-[80%] text-center font-roboto-flex leading-tight">Anamnese sem

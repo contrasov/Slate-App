@@ -38,7 +38,7 @@
                         </span>
                         <div class="flex flex-row justify-between">
                             <img class="w-[350px] mt-5" src="images/card-img-3.svg" alt="Interface Intuitiva">
-                            <img class="mb-8" src="images/card-img-4.svg" alt="">
+                            <img class="mb-8 w-[240px]" src="images/card-img-4.svg" alt="Interface Intuitiva">
                         </div>
                     </div>
 
