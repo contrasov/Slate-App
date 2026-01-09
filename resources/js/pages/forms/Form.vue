@@ -21,7 +21,7 @@ import { Trash2, Pencil, Eye } from 'lucide-vue-next';
                     <Button variant="outline" class="h-10">Buscar</Button>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <h1 class="text-gray-400 text-xs" >123 fichas</h1>
+                    <h1 class="text-gray-400 text-xs" >5 fichas</h1>
 
                     <!-- fichas -->
                     <div class="flex flex-col gap-2 overflow-y-auto max-h-[70vh]">

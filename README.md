@@ -9,13 +9,49 @@
 ## Descrição
 Slate é um sistema de fichas de anamnese e agendamentos de consultas, desenvolvido utilizando Laravel para o backend e Vue.js para o frontend. O sistema é projetado para facilitar a gestão de consultas e a coleta de informações dos pacientes.
 
+
 ## Como fazer rodar
-    --*
 
-## Contato
-Para mais informações ou dúvidas, entre em contato:
-- **Email:** agvdsbs@gmail.com
-- **GitHub:** [contrasov](https://github.com/controsov)
+Para executar o projeto, é necessário ter o **Docker**, **Docker Compose**, **PHP**, **Compose** instalados na máquina.
 
-## Licença
-Este projeto está licenciado sob a Licença MIT, que é uma licença permissiva. No entanto, todos os direitos são reservados. Veja o arquivo [LICENSE](LICENSE) para mais detalhes sobre as condições de uso e distribuição.
+Possa ser que eu configure para rodar com docker.
+
+### Build e subida dos containers
+Na raiz do projeto, execute:
+
+```bash
+sudo docker compose build
+sudo docker compose up
+````
+
+Esse processo irá:
+
+* Construir as imagens necessárias
+* Subir os containers
+* Inicializar o banco de dados **PostgreSQL**
+
+### Rodar o projeto Laravel
+
+O projeto pode ser executado utilizando **PHP Legacy** ou **PHP 8.4**, conforme a configuração do ambiente.
+
+Para iniciar a aplicação em modo de desenvolvimento, execute:
+
+```bash
+php-legacy compose run dev 
+```
+ou
+
+```bash
+php compose run dev 
+```
+
+ou 
+
+```bash
+php-legacy /usr/bin/composer run dev 
+```
+
+### Observações
+
+* Verifique se as portas definidas no `docker-compose.yml` estão livres.
+* O banco de dados PostgreSQL é iniciado automaticamente.

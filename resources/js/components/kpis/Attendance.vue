@@ -93,8 +93,8 @@ const series = ref([{
         </div>
 
         <div class="flex items-center gap-2">
-            <h1 class="text-[40px] font-bold">1,439</h1>
-            <span class="bg-green-100 text-green-600 px-1 py-1 rounded-md text-sm font-medium">+231</span>
+            <h1 class="text-[40px] font-bold">0</h1>
+            <!-- <span class="bg-green-100 text-green-600 px-1 py-1 rounded-md text-sm font-medium">+231</span> -->
         </div>
 
         <div class="h-16">
