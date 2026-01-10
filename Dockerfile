@@ -18,7 +18,3 @@ RUN composer install --no-scripts --no-autoloader
 
 COPY . .
 RUN composer dump-autoload
-
-CMD composer install \
- && php artisan migrate --force \
- && composer run dev
