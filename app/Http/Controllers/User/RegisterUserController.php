@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -44,6 +45,9 @@ class RegisterUserController extends Controller
             'schedule_token' => $token
         ]);
 
-        return redirect()->route('login');
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard');
     }
 }
