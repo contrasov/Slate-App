@@ -25,13 +25,16 @@ class RegisterUserController extends Controller
         return Inertia::render('auth/Register');
     }
 
-    /* lançando a função de registro */
     public function register(Request $request){
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        ],
+        [
+            'password.min' => 'A senha deve ter pelo menos 8 caracteres.'
+        ]
+        );
 
         do {
             $token = Str::random(6);

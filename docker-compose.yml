@@ -12,16 +12,22 @@ services:
       DB_PORT: 5432
       DB_DATABASE: slate_app
       DB_USERNAME: laravel
-      DB_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-local-dev-password}
+      APP_URL: http://localhost
     depends_on:
       postgres:
         condition: service_healthy
     command: >
-      sh -c "
+      sh -c '
+        if [ ! -f .env ]; then cp .env.example .env; fi &&
         composer install &&
+        php artisan config:clear &&
+        if ! grep -q "^APP_KEY=" .env; then printf "\\nAPP_KEY=\\n" >> .env; fi &&
+        if ! grep -q "^APP_KEY=base64:" .env; then php artisan key:generate; fi &&
+        if [ ! -x node_modules/.bin/vite ]; then npm ci; fi &&
         php artisan migrate --force &&
         composer run dev
-      "
+      '
     ports:
       - "127.0.0.1:8000:8000"
       - "127.0.0.1:5173:5173"
@@ -30,12 +36,10 @@ services:
     image: postgres:16
     container_name: slate_postgres
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:5432:5432"
     environment:
       POSTGRES_DB: slate_app
       POSTGRES_USER: laravel
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-dev-password}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
