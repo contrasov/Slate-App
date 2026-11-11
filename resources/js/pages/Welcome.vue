@@ -22,10 +22,9 @@ import Doubts from '@/components/landing/Doubts.vue';
                 class="fixed top-2 left-0 right-0 w-[97%] mx-auto flex flex-row items-center justify-between text-sm bg-white py-2 px-4 rounded-[20px] shadow-xl">
                 <Logo class="h-12" />
                 <ul class="flex flex-row gap-3 font-bold justify-center lg:pl-14 text-darkTextPrincipal1">
-                    <li class="hover:underline cursor-pointer">Benefícios</li>
-                    <li class="hover:underline cursor-pointer">Experiências</li>
-                    <li class="hover:underline cursor-pointer">Dúvidas</li>
-                    <li class="hover:underline cursor-pointer">Suporte</li>
+                    <li><a href="#beneficios" class="hover:underline">Recursos</a></li>
+                    <li><a href="#sobre" class="hover:underline">Sobre o Slate</a></li>
+                    <li><a href="#duvidas" class="hover:underline">Dúvidas</a></li>
                 </ul>
 
                 <nav class="flex items-center justify-end gap-2">
@@ -44,16 +43,16 @@ import Doubts from '@/components/landing/Doubts.vue';
         <div class="w-full flex flex-col items-center gap-24 justify-center text-darkTextPrincipal1">
 
             <div class="flex flex-col items-center gap-4">
-                <h1 class="font-bold text-[64px] w-[80%] text-center font-roboto-flex leading-tight">Anamnese sem
-                    complicação. <span class="font-bold text-greenPrincipal1">Agende, colete e evolua. </span></h1>
+                <h1 class="font-bold text-[64px] w-[80%] text-center font-roboto-flex leading-tight">Sua rotina de atendimentos,
+                    <span class="font-bold text-greenPrincipal1">mais organizada.</span></h1>
                 <h2 class="font-medium w-[60%] text-center">
-                    O Slate centraliza agendamento e ficha de anamnese
-                    em uma plataforma intuitiva e pronta para crescer com você.
+                    Organize seus horários, compartilhe um link para agendamentos e acompanhe seus pacientes em um só lugar.
+                    As fichas clínicas ficam disponíveis como complemento, quando você precisar.
                 </h2>
 
                 <Link :href="route('user.register')"
                     class="inline-block rounded-md bg-greenPrincipal1 hover:bg-[#00929D] px-5 py-1.5 text-sm leading-normal text-white font-medium hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]">
-                Crie sua conta grátis
+                Comece a organizar sua agenda
                 </Link>
             </div>
 
@@ -61,8 +60,8 @@ import Doubts from '@/components/landing/Doubts.vue';
                 <img src="images/Dashboard.svg" alt="Dashboard do sistema Slate">
             </div>
 
-            <Benefits />
-            <Experiences />
+            <div id="beneficios"><Benefits /></div>
+            <div id="sobre"><Experiences /></div>
             <Doubts />
 
             <footer class="bg-white w-full p-5 flex flex-col gap-8">

@@ -22,7 +22,14 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'schedule_token'
+        'schedule_token',
+        'account_type',
+        'public_name',
+        'phone',
+        'specialty',
+        'timezone',
+        'onboarding_complete',
+        'appointment_duration',
     ];
 
     /**
@@ -50,5 +57,10 @@ class User extends Authenticatable
 
     public function schedule(){
         return $this->hasMany(Schedule::class);
+    }
+
+    public function weeklyAvailability()
+    {
+        return $this->hasMany(WeeklyAvailability::class, 'user_id');
     }
 }

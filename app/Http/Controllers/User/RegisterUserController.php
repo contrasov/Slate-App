@@ -27,11 +27,13 @@ class RegisterUserController extends Controller
 
     public function register(Request $request){
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', 'regex:/^\S+\s+\S+.*$/u'],
             'email' => 'required|string|email|max:255|unique:users',
+            'account_type' => 'required|in:professional,clinic',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ],
         [
+            'name.regex' => 'Informe seu nome e sobrenome.',
             'password.min' => 'A senha deve ter pelo menos 8 caracteres.'
         ]
         );
@@ -44,6 +46,8 @@ class RegisterUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => 'médico',
+            'account_type' => $request->account_type,
+            'onboarding_complete' => false,
             'password' => $request->password,
             'schedule_token' => $token
         ]);
@@ -51,6 +55,6 @@ class RegisterUserController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('onboarding.edit');
     }
 }

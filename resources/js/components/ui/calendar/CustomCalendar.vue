@@ -6,16 +6,14 @@ import { CalendarCell, CalendarCellTrigger, CalendarGrid, CalendarGridBody, Cale
 
 const props = defineProps<CalendarRootProps & { 
   class?: HTMLAttributes['class']; 
-  availableDays?: number[];
   customHeadings?: string[];
-  disableDatesBeforeToday?: boolean;
   customDayClass?: (date: any) => string | null;
 }>()
 
 const emits = defineEmits<CalendarRootEmits>()
 
 const delegatedProps = computed(() => {
-  const { class: _, customHeadings: __, availableDays: ___, disableDatesBeforeToday: ____, customDayClass: _____, ...delegated } = props
+  const { class: _, customHeadings: __, customDayClass: ___, ...delegated } = props
 
   return delegated
 })
@@ -32,29 +30,8 @@ const getHeadings = (weekDays: string[]) => {
   return weekDays.map((day, index) => weekDaysPtBr[index]);
 }
 
-const isDateAvailable = (day: any) => {
-  if (!props.availableDays) return true;
-  
-  const jsDate = new Date(day.toString());
-  
-  if (props.disableDatesBeforeToday && jsDate <= new Date()) {
-    return false;
-  }
-  
-  const weekday = jsDate.getDay();
-  return props.availableDays.includes(weekday);
-};
-
 const getDayClass = (day: any) => {
-  if (props.customDayClass) {
-    return props.customDayClass(day);
-  }
-  
-  if (props.availableDays) {
-    return isDateAvailable(day) ? 'border-2 border-green-500/10' : '';
-  }
-  
-  return '';
+  return props.customDayClass?.(day) ?? '';
 };
 </script>
 
@@ -92,7 +69,7 @@ const getDayClass = (day: any) => {
               <CalendarCellTrigger
                 :day="weekDate"
                 :month="month.value"
-                :availableDays="props.availableDays || []"
+                :availableDays="[]"
                 :class="getDayClass(weekDate)"
                 @click="emits('update:modelValue', weekDate)"
               />
@@ -102,4 +79,4 @@ const getDayClass = (day: any) => {
       </CalendarGrid>
     </div>
   </CalendarRoot>
-</template> 
+</template>

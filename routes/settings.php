@@ -6,6 +6,7 @@ use App\Http\Controllers\User\SettingsUserController;
 
 Route::middleware('auth')->group(function(){
     Route::get('settings/profile', [SettingsUserController::class, 'profile'])->name('profile.edit');
+    Route::patch('settings/profile', [SettingsUserController::class, 'updateProfile'])->name('profile.update');
 
     Route::get('settings/password', [SettingsUserController::class, 'password'])->name('password.edit');
 

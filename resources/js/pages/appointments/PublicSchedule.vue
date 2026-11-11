@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import Input from '@/components/ui/input/Input.vue';
-import { CalendarDays, Clock } from 'lucide-vue-next';
+import { CalendarDays, CheckCircle2, Clock } from 'lucide-vue-next';
+import InputError from '@/components/InputError.vue';
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { DateValue } from '@internationalized/date';
@@ -18,23 +19,31 @@ const props = defineProps<{
         name: string;
         schedule_token: string;
     },
-    schedules: Array<{
+    weeklyAvailability: Array<{
         id: number;
         weekday: number;
         start_time: string;
-        end_time: string;
-        duration: string;
+        slot_count: number;
+        generated_times: string[];
+        available_times: string[];
     }> | null;
+    freeDays: string[];
     appointments: Array<{
         id: number;
         appointment_time: string;
         appointment_date: string;
     }> | null;
+    bookingSuccess: {
+        name: string;
+        date: string;
+        time: string;
+    } | null;
 }>();
 
 const selectedDate = ref<DateValue | undefined>(undefined);
 const selectedTime = ref<string | null>(null);
 const availableTimes = ref<string[]>([]);
+const availabilityNotice = ref('');
 const scheduledAppointments = ref<{ time: string; date: string }[]>([]);
 const availableDays = ref<number[]>([]);
 
@@ -47,58 +56,66 @@ if (props.appointments) {
 }
 
 const calculateAvailableDays = () => {
-    if (!props.schedules || !Array.isArray(props.schedules)) return; 
-    availableDays.value = props.schedules.map(schedule => schedule.weekday);
+    if (!props.weeklyAvailability || !Array.isArray(props.weeklyAvailability)) return;
+    availableDays.value = props.weeklyAvailability
+        .filter((schedule) => schedule.available_times?.length > 0)
+        .map((schedule) => schedule.weekday);
 }
 
 calculateAvailableDays();
 
-const calculateAvailableTimes = (date: DateValue) => {
-    const jsDate = new Date(date.toString());
-    const jsWeekday = jsDate.getDay();
-    const systemWeekday = (jsWeekday) % 7;
-    
-    const schedule = props.schedules?.find(s => s.weekday === systemWeekday);
+const isDateUnavailable = (date: DateValue) => {
+    const dateString = date.toString();
+    const weekday = new Date(`${dateString}T12:00:00`).getDay();
+    const today = new Date();
+    const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    return dateString < todayString
+        || props.freeDays.includes(dateString)
+        || !availableDays.value.includes(weekday);
+};
 
-    if(!schedule){
+const calculateAvailableTimes = (date: DateValue) => {
+    const dateString = date.toString();
+    const systemWeekday = new Date(`${dateString}T12:00:00`).getDay();
+    const schedule = props.weeklyAvailability?.find((item) => item.weekday === systemWeekday);
+
+    if (!schedule || props.freeDays.includes(dateString)) {
         availableTimes.value = [];
         return;
     }
 
-    const start = new Date(`2000-01-01T${schedule.start_time}`);
-    const end = new Date(`2000-01-01T${schedule.end_time}`);
-    const duration = parseInt(schedule.duration.split(':')[0]) * 60 + parseInt(schedule.duration.split(':')[1]);
-
-    const times: string[] = [];
-    let current = start;
-
-    while(current < end){
-        const timeString = current.toTimeString().slice(0, 5);
-        
+    availableTimes.value = (schedule.available_times ?? []).filter((timeString) => {
         const isScheduled = scheduledAppointments.value.some(appointment => 
-            appointment.date === jsDate.toISOString().split('T')[0] && appointment.time === timeString
+            appointment.date === dateString && appointment.time === timeString
         );
-
-        if (!isScheduled) {
-            times.push(timeString);
-        }
-        
-        current.setMinutes(current.getMinutes() + duration);
-    }
-
-    availableTimes.value = times;
+        return !isScheduled;
+    });
 };
 
 const dateSelect = (date: DateValue | undefined) => {
     if (!date) return;
 
     selectedDate.value = date;
-    const jsDate = new Date(date.toString());
-    form.date = jsDate.toISOString().split('T')[0];
-    
-    const jsWeekday = jsDate.getDay();
-    form.weekday = (jsWeekday) % 7;
-    
+    selectedTime.value = null;
+    form.schedule_time = '';
+
+    if (isDateUnavailable(date)) {
+        form.date = '';
+        availableTimes.value = [];
+        const dateString = date.toString();
+        const today = new Date();
+        const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+        availabilityNotice.value = dateString < todayString
+            ? 'Essa data já passou.'
+            : props.freeDays.includes(dateString)
+                ? 'Não haverá atendimento nesta data: ela está fechada.'
+                : 'Não há atendimento neste dia da semana.';
+        return;
+    }
+
+    availabilityNotice.value = '';
+    form.date = date.toString();
     calculateAvailableTimes(date);
 };
 
@@ -118,100 +135,168 @@ const submit = () => {
     }
 
     form.post(route('schedule.public.create', { token: props.user.schedule_token }), {
-        onSuccess: () => {
-            form.reset();
-            selectedDate.value = undefined;
-            selectedDate.value = undefined;
-            toast({
-                title: 'Agendamento realizado',
-                description: 'Seu agendamento foi realizado com sucesso. Eles entrarão em contato em breve.',
-                variant: 'defaultSlate'
-            });
-        }
+        preserveScroll: true,
     });
 }
 
+const scheduleAnother = () => router.get(
+    route('schedule.public', { token: props.user.schedule_token }),
+    {},
+    { replace: true },
+);
+
+const formatBookingDate = (date: string) => new Date(`${date}T12:00:00`).toLocaleDateString('pt-BR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+});
+
 const form = useForm({
-    user_id: props.user.id,
     name: '',
     phone: '',
     date: '',
     schedule_time: '',
-    weekday: 0,
 })
 
 </script>
 
 <template>
-    <div class="relative h-[40vh] bg-[url('/images/ufc.jpg')] bg-cover bg-center">
-        <main class="pt-[10vh] md:mx-[50vh] h-full">
-            <Head title="Agendamento" />
-            <div class="flex flex-1 flex-col gap-4 p-4">
-                <div class="bg-white p-4 rounded-xl border border-sidebar-border">
-                    <span class="flex gap-1 items-center">
-                        <h1 class="font-bold">Agendar consulta com {{user.name}}</h1>
-                    </span>
-                    <h2 class="text-sm md:text-bm">Rua Endereço do local do estabelecimento, algum canto ai, 990099-399, Russas-CE</h2>
+    <div class="relative min-h-screen bg-slate-50">
+        <Head :title="props.bookingSuccess ? 'Agendamento confirmado' : 'Agendamento'" />
+        <div class="absolute inset-x-0 top-0 h-64 bg-[url('/images/ufc.jpg')] bg-cover bg-center">
+            <div class="absolute inset-0 bg-slate-950/35"></div>
+        </div>
+
+        <main v-if="props.bookingSuccess" class="relative mx-auto flex min-h-screen w-full max-w-3xl items-center px-4 py-10 sm:px-6">
+            <section class="w-full rounded-2xl border bg-white p-6 text-center shadow-xl shadow-slate-900/10 sm:p-10">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-greenPrincipal1/10 text-greenPrincipal1">
+                    <CheckCircle2 class="h-9 w-9" />
                 </div>
-                <div class="bg-white flex md:flex-row flex-col h-fit rounded-xl border border-sidebar-border">
-                    <Calendar 
-                    @update:modelValue="dateSelect" 
-                    :availableDays="availableDays"
-                    />
-                    <div class="flex flex-col gap-2 w-full p-4">
-                        <h1>Horarios disponíveis</h1>
-                        <Button
-                        v-for="time in availableTimes"
-                        :key="time"
-                        variant="slateTime"
-                        @click="timeSelect(time)"
-                        :class="{ 'bg-[#0db97f] border-none text-white' : selectedTime == time }"
-                            >
-                            {{ time }} 
-                        </Button>
-                    </div>
-                </div>
-                <div class="bg-white flex flex-col gap-4 p-4 rounded-xl border border-sidebar-border">
-                    <div class="flex flex-col font-medium">
-                        <div class="flex flex-row gap-1 text-[13px]">
-                            <h1>Agendamento para:</h1>
-                            <span class="flex items-center">
-                                <CalendarDays class="h-4 p-0" />
-                                <h1>{{ selectedDate ? new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day).toLocaleDateString() : '(Data)' }}</h1>
-                            </span>
-                            <span class="flex items-center">
-                                <Clock class="h-4 p-0" />
-                                <h1>{{ selectedTime || '(Hora)' }}</h1>
-                            </span>
+                <p class="mt-5 text-sm font-semibold uppercase tracking-[0.16em] text-greenPrincipal1">Solicitação enviada</p>
+                <h1 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">Agendamento realizado!</h1>
+                <p class="mx-auto mt-3 max-w-lg text-sm leading-6 text-muted-foreground">
+                    {{ props.bookingSuccess.name }}, sua solicitação de consulta com {{ user.name }} foi registrada. O profissional entrará em contato para confirmar.
+                </p>
+
+                <div class="mx-auto mt-6 grid max-w-md gap-3 rounded-xl bg-slate-50 p-4 text-left sm:grid-cols-2">
+                    <div class="flex items-start gap-3">
+                        <CalendarDays class="mt-0.5 h-5 w-5 shrink-0 text-greenPrincipal1" />
+                        <div>
+                            <p class="text-xs text-muted-foreground">Data</p>
+                            <p class="mt-0.5 text-sm font-medium capitalize">{{ formatBookingDate(props.bookingSuccess.date) }}</p>
                         </div>
-                        <h3 class="text-[13px] py-1 text-gray-500">Insira suas informações de contato para agendar o atendimento.</h3>
                     </div>
-                    
-                    <div class="grid gap-2">
-                        <label class="text-sm" for="name">Nome completo</label>
-                        <Input v-model="form.name" 
-                        required 
-                        placeholder="Alvaro George Veras dos Santos"
-                        />
+                    <div class="flex items-start gap-3">
+                        <Clock class="mt-0.5 h-5 w-5 shrink-0 text-greenPrincipal1" />
+                        <div>
+                            <p class="text-xs text-muted-foreground">Horário</p>
+                            <p class="mt-0.5 text-sm font-medium">{{ props.bookingSuccess.time }}</p>
+                        </div>
                     </div>
-
-                    <div class="grid gap-2">
-                        <label class="text-sm" for="phone">Número para contato (Whatsapp)</label>
-                        <Input 
-                        v-model="form.phone" 
-                        @keypress="(event: KeyboardEvent) => !/[0-9]/.test(event.key) && event.preventDefault()" 
-                        required type="tel" 
-                        maxlength="11" 
-                        placeholder="88998462350"
-                        />
-                    </div>
-
-                    <Button variant="slateDefault" 
-                    @click="submit" 
-                    >Confirmar Agendamento</Button>
-                    <Toaster/>
                 </div>
-            </div>
+
+                <Button variant="slateDefault" class="mt-7" @click="scheduleAnother">Agendar outra consulta</Button>
+            </section>
         </main>
+
+        <main v-else class="relative mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-8 sm:px-6 lg:py-12">
+            <header class="rounded-2xl border border-white/70 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-6">
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-greenPrincipal1">Agendamento online</p>
+                <h1 class="mt-1 text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">Agende sua consulta com {{ user.name }}</h1>
+                <p class="mt-2 text-sm text-muted-foreground">Escolha uma data e um horário disponível para continuar.</p>
+            </header>
+
+            <section class="overflow-hidden rounded-2xl border bg-white shadow-lg shadow-slate-900/5">
+                <div class="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)]">
+                    <div class="flex justify-center border-b p-3 sm:p-6 lg:border-b-0 lg:border-r">
+                        <Calendar
+                            class="w-full"
+                            :model-value="selectedDate"
+                            :available-days="availableDays"
+                            :is-date-unavailable="isDateUnavailable"
+                            @update:model-value="dateSelect"
+                        />
+                    </div>
+
+                    <div class="flex min-h-72 flex-col gap-4 p-5 sm:p-6">
+                        <div>
+                            <h2 class="font-semibold text-slate-900">Horários disponíveis</h2>
+                            <p class="mt-1 text-sm text-muted-foreground">
+                                {{ selectedDate ? new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Selecione uma data no calendário.' }}
+                            </p>
+                        </div>
+
+                        <InputError :message="form.errors.date" />
+                        <div v-if="availableTimes.length" class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2">
+                            <Button
+                                v-for="time in availableTimes"
+                                :key="time"
+                                type="button"
+                                variant="slateTime"
+                                class="h-10 rounded-lg"
+                                :class="selectedTime === time ? 'border-greenPrincipal1 bg-greenPrincipal1 text-white hover:bg-[#00929D] hover:text-white' : ''"
+                                :aria-pressed="selectedTime === time"
+                                @click="timeSelect(time)"
+                            >
+                                <Clock class="mr-1.5 h-4 w-4" />{{ time }}
+                            </Button>
+                        </div>
+                        <div v-else class="rounded-xl border border-dashed bg-slate-50 px-4 py-6 text-center text-sm text-muted-foreground">
+                            {{ availabilityNotice || (selectedDate ? 'Não há horários disponíveis para essa data.' : 'Os horários serão exibidos após selecionar uma data.') }}
+                        </div>
+                        <InputError :message="form.errors.schedule_time" />
+                    </div>
+                </div>
+            </section>
+
+            <section class="rounded-2xl border bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-6">
+                <div class="flex flex-col gap-2 border-b pb-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h2 class="font-semibold text-slate-900">Seus dados</h2>
+                        <p class="text-sm text-muted-foreground">Preencha seus dados para confirmar o agendamento.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
+                            <CalendarDays class="h-3.5 w-3.5" />
+                            {{ selectedDate ? new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day).toLocaleDateString('pt-BR') : 'Data não selecionada' }}
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
+                            <Clock class="h-3.5 w-3.5" />{{ selectedTime || 'Horário não selecionado' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                    <div class="grid gap-2">
+                        <label class="text-sm font-medium" for="name">Nome completo</label>
+                        <Input id="name" v-model="form.name" required autocomplete="name" placeholder="Seu nome completo" />
+                        <InputError :message="form.errors.name" />
+                    </div>
+                    <div class="grid gap-2">
+                        <label class="text-sm font-medium" for="phone">Telefone para contato (WhatsApp)</label>
+                        <Input
+                            id="phone"
+                            v-model="form.phone"
+                            @keypress="(event: KeyboardEvent) => !/[0-9]/.test(event.key) && event.preventDefault()"
+                            required
+                            type="tel"
+                            maxlength="11"
+                            autocomplete="tel"
+                            placeholder="(88) 99999-9999"
+                        />
+                        <InputError :message="form.errors.phone" />
+                    </div>
+                </div>
+
+                <div class="mt-5 flex flex-col-reverse gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="text-xs text-muted-foreground">Seus dados serão usados para confirmar a consulta.</p>
+                    <Button variant="slateDefault" :disabled="form.processing" class="w-full sm:w-auto" @click="submit">
+                        {{ form.processing ? 'Confirmando…' : 'Confirmar agendamento' }}
+                    </Button>
+                </div>
+            </section>
+        </main>
+        <Toaster />
     </div>
 </template>

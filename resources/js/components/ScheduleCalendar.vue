@@ -22,7 +22,7 @@ const formatTime = (time: string) => {
 
 console.log(props.appointments);
 
-const currentDate = ref(new Date(2025, 4, 1))
+const currentDate = ref(new Date())
 
 const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 

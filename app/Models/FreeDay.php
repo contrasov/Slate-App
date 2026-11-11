@@ -11,6 +11,11 @@ class FreeDay extends Model
         'free_day'
     ];
 
+    protected function casts(): array
+    {
+        return ['free_day' => 'date:Y-m-d'];
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { type BreadcrumbItem, type SharedData, type User } from '@/types';
-import WorkTime from '@/components/WorkTime.vue';
+import { formatBrazilianPhone } from '@/lib/phone';
 
 interface Props {
     mustVerifyEmail: boolean;
@@ -31,12 +31,20 @@ const user = page.props.auth.user as User;
 const form = useForm({
     name: user.name,
     email: user.email,
+    public_name: user.public_name ?? '',
+    phone: user.phone ?? '',
+    specialty: user.specialty ?? '',
+    timezone: user.timezone ?? 'America/Fortaleza',
 });
 
 const submit = () => {
     form.patch(route('profile.update'), {
         preserveScroll: true,
     });
+};
+
+const formatPhoneInput = () => {
+    form.phone = formatBrazilianPhone(form.phone);
 };
 </script>
 
@@ -50,10 +58,15 @@ const submit = () => {
 
                 <form @submit.prevent="submit" class="space-y-6">
                     <div class="grid gap-2">
-                        <Label for="name">Nome</Label>
-                        <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Nome completo" />
+                        <Label for="name">Nome e sobrenome</Label>
+                        <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Seu nome e sobrenome" />
                         <InputError class="mt-2" :message="form.errors.name" />
                     </div>
+
+                    <div class="grid gap-2"><Label for="public_name">Nome público</Label><Input id="public_name" v-model="form.public_name" required/><InputError :message="form.errors.public_name" /></div>
+                    <div class="grid gap-2"><Label for="phone">Telefone de contato</Label><Input id="phone" v-model="form.phone" @input="formatPhoneInput" type="tel" required/><InputError :message="form.errors.phone" /></div>
+                    <div class="grid gap-2"><Label for="specialty">Área de atuação</Label><Input id="specialty" v-model="form.specialty" required/><InputError :message="form.errors.specialty" /></div>
+                    <div class="grid gap-2"><Label for="timezone">Fuso horário</Label><select id="timezone" v-model="form.timezone" class="h-10 rounded-md border border-input bg-background px-3 text-sm"><option value="America/Fortaleza">Fortaleza (UTC−03:00)</option><option value="America/Sao_Paulo">São Paulo (UTC−03:00)</option><option value="America/Manaus">Manaus (UTC−04:00)</option><option value="America/Rio_Branco">Rio Branco (UTC−05:00)</option></select><InputError :message="form.errors.timezone" /></div>
 
                     <div class="grid gap-2">
                         <Label for="email">Endereço de e-mail</Label>

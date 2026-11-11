@@ -31,6 +31,12 @@ export interface User {
     name: string;
     email: string;
     schedule_token?: string;
+    account_type: 'professional' | 'clinic';
+    public_name?: string | null;
+    phone?: string | null;
+    specialty?: string | null;
+    timezone?: string;
+    onboarding_complete?: boolean;
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;

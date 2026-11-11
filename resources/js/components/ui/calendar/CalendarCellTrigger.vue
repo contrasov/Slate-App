@@ -19,10 +19,13 @@ const delegatedProps = computed(() => {
 const forwardedProps = useForwardProps(delegatedProps)
 
 const isAvailable = (day: DateValue) => {
-  const jsDate = new Date(day.toString());
+  const dateString = day.toString();
+  const [year, month, date] = dateString.split('-').map(Number);
+  const jsDate = new Date(year, month - 1, date, 12);
   const currentDate = new Date();
-  
-  if (jsDate <= currentDate){
+
+  const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  if (jsDate < today) {
     return false;
   }
   
@@ -38,13 +41,14 @@ const isAvailable = (day: DateValue) => {
       buttonVariants({ variant: 'ghost' }),
       'h-10 w-10 p-0 font-normal',
       { 'border-2 border-green-500/30': isAvailable(day) },
+      'data-[disabled]:border-transparent data-[unavailable]:border-transparent data-[outside-view]:border-transparent',
       '[&[data-today]:not([data-selected])]:bg-greenPrincipal1/20 [&[data-today]:not([data-selected])]:text-accent-foreground',
       // Selected
       'data-[selected]:bg-greenPrincipal1 data-[selected]:text-white data-[selected]:hover:bg-primary data-[selected]:hover:text-primary-foreground data-[selected]:focus:bg-greenPrincipal1 data-[selected]:focus:text-primary-foreground',
       // Disabled
-      'data-[disabled]:text-muted-foreground data-[disabled]:opacity-50',
+      'disabled:opacity-100 data-[disabled]:text-slate-400 data-[disabled]:opacity-100',
       // Unavailable
-      'data-[unavailable]:text-destructive-foreground data-[unavailable]:line-through',
+      'data-[unavailable]:text-slate-500 data-[unavailable]:opacity-100',
       // Outside months
       'data-[outside-view]:text-muted-foreground data-[outside-view]:opacity-50 [&[data-outside-view][data-selected]]:bg-accent/50 [&[data-outside-view][data-selected]]:text-muted-foreground [&[data-outside-view][data-selected]]:opacity-30',
       props.class,

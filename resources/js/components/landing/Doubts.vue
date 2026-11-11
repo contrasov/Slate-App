@@ -11,35 +11,35 @@ const defaultValue = 'item-1'
 const accordionItems = [
     {
         value: 'item-1',
-        title: 'O Slate é gratuito?',
-        content: 'Sim, o Slate oferece um plano gratuito com todas as funcionalidades essenciais. Novas funções, como personalização de ficha, poderão ter planos específicos no futuro.'
+        title: 'O que posso organizar no Slate?',
+        content: 'O Slate reúne agenda, horários de atendimento, agendamentos públicos e cadastro de pacientes. A disponibilidade pode variar conforme as funções já liberadas na sua conta.'
     },
     { 
         value: 'item-2', 
         title: 'Meus dados e dos meus pacientes estão seguros?', 
-        content: 'Com certeza. Utilizamos criptografia e boas práticas de segurança para garantir que todos os dados fiquem protegidos e acessíveis apenas por você.'
+        content: 'O Slate está em desenvolvimento. Consulte os termos e a política de privacidade do produto para entender como os dados são tratados antes de registrar informações sensíveis.'
     },
     { 
         value: 'item-3', 
         title: 'Consigo usar o Slate em atendimentos online?', 
-        content: 'Sim! O sistema foi pensado para funcionar bem em qualquer formato de atendimento, seja presencial ou remoto.' 
+        content: 'Você pode usar a agenda para organizar atendimentos presenciais ou online. O Slate não realiza a chamada de vídeo.'
     },
     { 
         value: 'item-4', 
         title: 'Posso personalizar as perguntas da ficha de anamnese?', 
-        content: 'Em breve! A versão 2 do Slate trará a funcionalidade de personalização completa da ficha, adaptando-a à sua área de atuação.' 
+        content: 'As fichas clínicas são um complemento ao fluxo de agendamento. A personalização das perguntas é uma possibilidade para versões futuras.'
     },
     { 
         value: 'item-5', 
         title: 'É possível exportar ou imprimir os dados da anamnese?', 
-        content: 'Sim. Você pode visualizar, exportar em PDF ou imprimir as fichas de anamnese sempre que precisar, com poucos cliques.' 
+        content: 'A exportação e impressão de fichas não estão descritas como recursos disponíveis nesta versão.'
     }
 ]
 
 </script>
 
 <template>
-    <section class="flex flex-col items-center gap-14 w-[81%]">
+    <section id="duvidas" class="flex flex-col items-center gap-14 w-[81%]">
         <h1 class="text-3xl font-bold text-center">Dúvidas? A gente responde.</h1>
 
         <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">

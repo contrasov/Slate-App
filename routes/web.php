@@ -38,10 +38,6 @@ Route::post('logout', [LoginUserController::class, 'logout'])
     ->middleware(['auth'])
     ->name('logout');
 
-Route::post('work-time', [ScheduleController::class, 'store'])
-    ->middleware(['auth'])
-    ->name('work-time.store');
-
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/schedule.php';
