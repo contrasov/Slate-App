@@ -7,15 +7,15 @@ import { NotepadText, Clipboard } from 'lucide-vue-next';
 <template>
   <div>
     <Tabs defaultValue="info">
-      <TabsList>
+      <TabsList class="rounded-lg bg-muted/60 p-1">
         <TabsTrigger value="info">Histórico de consultas</TabsTrigger>
         <TabsTrigger value="address">Histórico de Anamnese</TabsTrigger>
       </TabsList>
       <TabsContent value="info">
-        <div class="flex flex-col gap-2 w-full overflow-y-auto max-h-[70vh]">
-          <div v-for="index in 10" :key="index" class="flex flex-col w-full gap-2">
+        <div class="flex max-h-[70vh] w-full flex-col gap-2 overflow-y-auto">
+          <div v-for="index in 10" :key="index" class="flex w-full flex-col gap-2">
             <div
-              class="flex flex-row gap-2 justify-between items-center w-full p-3 border bg-white rounded-md"
+              class="flex w-full flex-col items-start justify-between gap-3 rounded-xl border border-sidebar-border/70 bg-white p-4 sm:flex-row sm:items-center"
             >
               <div class="flex flex-col">
                 <h1>Consulta {{ index }}</h1>
@@ -33,10 +33,10 @@ import { NotepadText, Clipboard } from 'lucide-vue-next';
         </div>
       </TabsContent>
       <TabsContent value="address">
-        <div class="flex flex-col gap-2 w-full overflow-y-auto max-h-[500px]">
+        <div class="flex max-h-[500px] w-full flex-col gap-2 overflow-y-auto">
           <div v-for="index in 5" :key="index" class="flex flex-col w-full gap-2">
             <div
-              class="flex flex-row gap-2 justify-between items-center w-full p-3 border bg-white rounded-md"
+              class="flex w-full flex-col items-start justify-between gap-3 rounded-xl border border-sidebar-border/70 bg-white p-4 sm:flex-row sm:items-center"
             >
               <div class="flex flex-col">
                 <h1>Anamnese {{ index }}</h1>

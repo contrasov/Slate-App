@@ -1,16 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\User\LoginUserController;
 use App\Http\Controllers\Patients\PatientsController;
 use App\Http\Controllers\Form\FormController;
 use App\Http\Controllers\Appointments\ScheduleController;
 use App\Http\Controllers\Dashboard\DashboardController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('home');
+Route::get('/', [LoginUserController::class, 'create'])->name('login');
 
 Route::middleware(['auth'])->group(function(){
     Route::get('patients', [PatientsController::class, 'create'])
@@ -18,6 +15,9 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('patients/{id}', [PatientsController::class, 'showServicePatient'])
         ->name('patients.service');
+
+    Route::patch('patients/{id}', [PatientsController::class, 'update'])
+        ->name('patients.update');
 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])
         ->name('dashboard');

@@ -56,7 +56,7 @@ const formatPhoneInput = () => {
             <div class="flex flex-col space-y-6">
                 <HeadingSmall title="Informações do perfil" description="Atualizar seu nome e e-mail." />
 
-                <form @submit.prevent="submit" class="space-y-6">
+                <form @submit.prevent="submit" class="grid gap-x-6 gap-y-5 sm:grid-cols-2">
                     <div class="grid gap-2">
                         <Label for="name">Nome e sobrenome</Label>
                         <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Seu nome e sobrenome" />
@@ -66,9 +66,9 @@ const formatPhoneInput = () => {
                     <div class="grid gap-2"><Label for="public_name">Nome público</Label><Input id="public_name" v-model="form.public_name" required/><InputError :message="form.errors.public_name" /></div>
                     <div class="grid gap-2"><Label for="phone">Telefone de contato</Label><Input id="phone" v-model="form.phone" @input="formatPhoneInput" type="tel" required/><InputError :message="form.errors.phone" /></div>
                     <div class="grid gap-2"><Label for="specialty">Área de atuação</Label><Input id="specialty" v-model="form.specialty" required/><InputError :message="form.errors.specialty" /></div>
-                    <div class="grid gap-2"><Label for="timezone">Fuso horário</Label><select id="timezone" v-model="form.timezone" class="h-10 rounded-md border border-input bg-background px-3 text-sm"><option value="America/Fortaleza">Fortaleza (UTC−03:00)</option><option value="America/Sao_Paulo">São Paulo (UTC−03:00)</option><option value="America/Manaus">Manaus (UTC−04:00)</option><option value="America/Rio_Branco">Rio Branco (UTC−05:00)</option></select><InputError :message="form.errors.timezone" /></div>
+                    <div class="grid gap-2"><Label for="timezone">Fuso horário</Label><select id="timezone" v-model="form.timezone" class="h-10 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-greenPrincipal1"><option value="America/Fortaleza">Fortaleza (UTC−03:00)</option><option value="America/Sao_Paulo">São Paulo (UTC−03:00)</option><option value="America/Manaus">Manaus (UTC−04:00)</option><option value="America/Rio_Branco">Rio Branco (UTC−05:00)</option></select><InputError :message="form.errors.timezone" /></div>
 
-                    <div class="grid gap-2">
+                    <div class="grid gap-2 sm:col-span-2">
                         <Label for="email">Endereço de e-mail</Label>
                         <Input
                             id="email"
@@ -82,7 +82,7 @@ const formatPhoneInput = () => {
                         <InputError class="mt-2" :message="form.errors.email" />
                     </div>
 
-                    <div v-if="mustVerifyEmail && !user.email_verified_at">
+                    <div v-if="mustVerifyEmail && !user.email_verified_at" class="sm:col-span-2">
                         <p class="-mt-4 text-sm text-muted-foreground">
                             Your email address is unverified.
                             <Link
@@ -100,7 +100,7 @@ const formatPhoneInput = () => {
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 sm:col-span-2">
                         <Button variant="slateDefault" :disabled="form.processing">Salvar</Button>
 
                         <Transition

@@ -179,15 +179,15 @@ const form = useForm({
                     {{ props.bookingSuccess.name }}, sua solicitação de consulta com {{ user.name }} foi registrada. O profissional entrará em contato para confirmar.
                 </p>
 
-                <div class="mx-auto mt-6 grid max-w-md gap-3 rounded-xl bg-slate-50 p-4 text-left sm:grid-cols-2">
-                    <div class="flex items-start gap-3">
+                <div class="mx-auto mt-6 flex w-full max-w-md flex-col rounded-xl bg-slate-50 p-4 text-left">
+                    <div class="flex items-start gap-3 border-b border-sidebar-border/70 pb-4">
                         <CalendarDays class="mt-0.5 h-5 w-5 shrink-0 text-greenPrincipal1" />
                         <div>
                             <p class="text-xs text-muted-foreground">Data</p>
                             <p class="mt-0.5 text-sm font-medium capitalize">{{ formatBookingDate(props.bookingSuccess.date) }}</p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-3">
+                    <div class="flex items-start gap-3 pt-4">
                         <Clock class="mt-0.5 h-5 w-5 shrink-0 text-greenPrincipal1" />
                         <div>
                             <p class="text-xs text-muted-foreground">Horário</p>

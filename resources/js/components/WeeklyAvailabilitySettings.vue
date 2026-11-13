@@ -40,6 +40,7 @@ const props = defineProps<{
 const weekdays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 const duration = ref(props.appointmentDuration || '00:30');
 const storedByWeekday = new Map(props.weeklyAvailability.map((day) => [day.weekday, day]));
+const slotCount = ref(props.weeklyAvailability[0]?.slot_count ?? 8);
 
 const toMinutes = (time: string) => {
     const [hours, minutes] = time.split(':').map(Number);
@@ -101,6 +102,16 @@ const regenerateDay = (day: DayConfig) => {
 
 const regenerateAll = () => days.value.forEach(regenerateDay);
 
+const applySlotCount = () => {
+    const count = Number(slotCount.value);
+    if (!Number.isInteger(count) || count < 1 || count > 1440) return;
+
+    days.value.forEach((day) => {
+        day.slot_count = count;
+        regenerateDay(day);
+    });
+};
+
 const toggleTime = (day: DayConfig, time: string, enabled: boolean) => {
     if (enabled && !day.available_times.includes(time)) {
         day.available_times = [...day.available_times, time].sort();
@@ -158,7 +169,7 @@ const selectClosedDate = (date: DateValue | undefined) => {
 };
 
 const closedDateClass = (date: DateValue) => draftClosedDays.value.some((closedDay) => closedDay.free_day === date.toString())
-    ? 'border-2 border-darkTextPrincipal1 bg-darkTextPrincipal1/5 font-semibold text-darkTextPrincipal1'
+    ? "relative after:absolute after:bottom-1 after:right-1 after:h-1.5 after:w-1.5 after:rounded-full after:bg-darkTextPrincipal1 after:content-[''] data-[selected]:after:bg-white"
     : '';
 
 const isPastDate = (date: DateValue) => {
@@ -188,7 +199,7 @@ const hasInvalidGeneratedDay = () => !duration.value || toMinutes(duration.value
 </script>
 
 <template>
-    <div class="space-y-6 rounded-md border border-sidebar-border bg-white p-4 md:p-6">
+    <div class="space-y-6 rounded-2xl border border-sidebar-border/70 bg-white p-4 shadow-sm md:p-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <HeadingSmall title="Horários de atendimento" description="Configure horários semanais e datas fechadas. Salve tudo de uma vez." />
             <Button variant="slateDefault" :disabled="scheduleForm.processing || hasInvalidGeneratedDay()" @click="saveAvailability">
@@ -232,17 +243,20 @@ const hasInvalidGeneratedDay = () => !duration.value || toMinutes(duration.value
 
         <section class="space-y-3">
             <h2 class="text-sm font-medium">Horários por dia</h2>
+            <div class="grid gap-1 rounded-md bg-muted/40 p-4 sm:grid-cols-[minmax(0,1fr)_12rem] sm:items-end">
+                <div class="grid gap-1">
+                    <label for="global_slot_count" class="text-sm font-medium">Quantidade de horários por dia</label>
+                    <p class="text-xs text-muted-foreground">Aplique a mesma quantidade a todos os dias de atendimento.</p>
+                </div>
+                <Input id="global_slot_count" v-model.number="slotCount" class="h-9" type="number" min="1" max="1440" @change="applySlotCount" />
+            </div>
             <div v-if="selectedDays.length" class="divide-y rounded-lg border">
                 <div v-for="day in selectedDays" :key="day.weekday" class="space-y-2 p-3 sm:p-4">
-                    <div class="grid gap-2 sm:grid-cols-[minmax(8rem,1fr)_9rem_9rem] sm:items-end">
+                    <div class="grid gap-2 sm:grid-cols-[minmax(8rem,1fr)_9rem] sm:items-center">
                         <h3 class="text-sm font-semibold">{{ weekdays[day.weekday] }}</h3>
                         <label class="grid gap-1 text-xs text-muted-foreground">
                             Início
                             <Input :id="`start-${day.weekday}`" v-model="day.start_time" class="h-9" type="time" @change="regenerateDay(day)" />
-                        </label>
-                        <label class="grid gap-1 text-xs text-muted-foreground">
-                            Quantidade
-                            <Input :id="`count-${day.weekday}`" v-model.number="day.slot_count" class="h-9" type="number" min="1" max="1440" @change="regenerateDay(day)" />
                         </label>
                     </div>
                     <div class="flex flex-wrap items-center gap-1.5">

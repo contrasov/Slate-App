@@ -23,12 +23,27 @@ class PatientService {
         return $this->patientRepository->where($column, $value)->first();
     }
 
+    public function findPatientForCurrentUser($id) {
+        return $this->patientRepository
+            ->where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+    }
+
     public function createPatient(array $data) {
         return $this->patientRepository->create($data);
     }
 
     public function updatePatient($id, array $data) {
         return $this->patientRepository->update($id, $data);
+    }
+
+    public function updatePatientForCurrentUser($id, array $data) {
+        $patient = $this->findPatientForCurrentUser($id);
+
+        $patient->update($data);
+
+        return $patient;
     }
 
     public function deletePatient($id) {

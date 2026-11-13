@@ -24,7 +24,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
             <div class="space-y-6">
                 <HeadingSmall title="Configurações de aparência" description="Atualize as configurações de aparência da sua conta." />
                 <!-- <AppearanceTabs /> -->
-                 <h1 class="text-2xl" >A desenvolver</h1>
+                <div class="rounded-xl border border-sidebar-border/70 bg-muted/20 p-5">
+                    <p class="text-sm text-muted-foreground">As opções de aparência estarão disponíveis em breve.</p>
+                </div>
             </div>
         </SettingsLayout>
     </AppLayout>

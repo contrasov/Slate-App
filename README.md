@@ -22,7 +22,7 @@ docker compose up --build
 
 Na primeira execução, o Compose constrói a imagem, inicia o PostgreSQL e prepara a aplicação automaticamente: cria `.env` se necessário, instala as dependências, gera a chave do Laravel, aplica as migrações e inicia o servidor e o Vite.
 
-Abra <http://localhost:8000>. O Vite fica em <http://localhost:5173>. As portas são acessíveis apenas pela própria máquina.
+A aplicação roda na porta 8000: abra <http://localhost:8000> para acessar o login. O Vite fica na porta 5173 (<http://localhost:5173>). As portas são acessíveis apenas pela própria máquina.
 
 Para rodar em segundo plano:
 

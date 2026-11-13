@@ -41,31 +41,41 @@ const copylink = () => {
 <template>
     <AppLayout>
         <Head title="Agenda" />
-        <div class="flex bg-sidebar h-full flex-1 flex-col gap-4 p-4">
-            <div class="flex justify-between items-center">
-                <h1 class="font-bold" >Agenda de Consultas</h1>
-                <div>
+        <main class="min-h-full flex-1 bg-[#f5f7f6] p-4 sm:p-6 xl:p-8">
+            <div class="mx-auto flex w-full max-w-[1440px] flex-col gap-6">
+                <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-greenPrincipal1">Atendimento</p>
+                        <h1 class="text-2xl font-semibold tracking-tight text-darkTextPrincipal1 sm:text-3xl">Agenda</h1>
+                        <p class="text-sm text-muted-foreground">Acompanhe as consultas e sua disponibilidade semanal.</p>
+                    </div>
                     <Button
-                        variant="scheduleLink" @click="() => {
-                        toast({
-                            title: 'Link copiado',
-                            variant: 'defaultSlate'
-                        })
-                        copylink();
+                        variant="scheduleLink"
+                        class="self-start sm:self-auto"
+                        @click="() => {
+                            toast({
+                                title: 'Link copiado',
+                                variant: 'defaultSlate'
+                            })
+                            copylink();
                         }"
                     >
                         Copiar link
                     </Button>
-                </div>
-            </div>
+                </header>
             <WorkTime
                 :weekly-availability="props.weeklyAvailability"
                 :appointment-duration="props.appointmentDuration"
                 :free-days="props.freeDays"
             />
-            <div class="bg-white flex-1 rounded-xl border border-sidebar-border dark:border-sidebar-border md:min-h-min">
-                <ScheduleCalendar :appointments="props.appointments"/>
+            <section class="min-h-0 overflow-hidden rounded-2xl border border-sidebar-border/70 bg-white p-2 shadow-sm sm:p-4" aria-label="Calendário de consultas">
+                <ScheduleCalendar
+                    :appointments="props.appointments"
+                    :weekly-availability="props.weeklyAvailability"
+                    :free-days="props.freeDays"
+                />
+            </section>
             </div>
-        </div>
+        </main>
     </AppLayout>
 </template>

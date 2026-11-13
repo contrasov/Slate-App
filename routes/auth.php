@@ -16,7 +16,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('login', [LoginUserController::class, 'create'])
-    ->name('login');
+    ->name('login.page');
         
 Route::post('login', [LoginUserController::class, 'login'])
     ->name('login.submit');

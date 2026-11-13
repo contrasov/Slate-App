@@ -29,7 +29,7 @@ const daySummary = (times: string[]) => {
 </script>
 
 <template>
-    <section class="space-y-4 rounded-md border border-sidebar-border bg-white p-4 md:p-6">
+    <section class="space-y-4 rounded-2xl border border-sidebar-border/70 bg-white p-4 shadow-sm md:p-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <HeadingSmall title="Horário de atendimento" description="Veja sua disponibilidade semanal e ajuste os horários oferecidos para agendamento." />
             <Button variant="outline" as-child>

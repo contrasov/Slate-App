@@ -16,7 +16,7 @@ const chartOptions = ref({
     stroke: {
         curve: 'smooth',
         width: 2,
-        colors: ['#10B981'],
+        colors: ['#1DD496'],
         lineCap: 'round'
     },
     fill: {
@@ -27,7 +27,7 @@ const chartOptions = ref({
             opacityTo: 0.1,
             stops: [0, 90, 100]
         },
-        colors: ['#10B981']
+        colors: ['#1DD496']
     },
     grid: {
         show: false,
@@ -83,26 +83,26 @@ const series = ref([{
 </script>
 
 <template>
-    <div class="flex flex-col">
+    <div class="flex min-w-0 flex-col gap-2">
         <div class="flex items-center gap-1">
             <span class="flex flex-row items-center gap-1">
-                <ClipboardPenLine class="text-[#10B981] h-4 w-4"/>
-                <h1 class="font-medium text-[15px]">Fichas preenchidas</h1>    
+                <ClipboardPenLine class="text-[#1DD496] h-4 w-4"/>
+                <p class="text-sm font-medium text-muted-foreground">Fichas preenchidas</p>
             </span>
             <Info class="w-3 h-3 text-gray-400" />
         </div>
 
         <div class="flex items-center gap-2">
-            <h1 class="text-[40px] font-bold">0</h1>
+            <p class="text-3xl font-semibold tracking-tight text-darkTextPrincipal1">0</p>
         </div>
 
-        <div class="h-16">
+        <div class="mt-auto h-12 w-full overflow-hidden">
             <VueApexCharts
                 type="area"
                 :options="chartOptions"
                 :series="series"
-                height="20px"
-                width="220px"
+                height="48px"
+                width="100%"
             />
         </div>
     </div>

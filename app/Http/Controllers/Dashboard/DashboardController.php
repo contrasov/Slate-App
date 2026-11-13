@@ -19,10 +19,12 @@ class DashboardController extends Controller
     {
         $userAppointments = $this->appointmentService->getAllAppointments()->load('patient');  //retornar dados junto com tabela patient
         $amountAppointments = $userAppointments->count();
+        $completedAppointments = $userAppointments->where('status', 'Finalizado')->count();
 
         return Inertia::render('Dashboard', [
             'appointments' => $userAppointments,
-            'amountAppointments' => $amountAppointments
+            'amountAppointments' => $amountAppointments,
+            'completedAppointments' => $completedAppointments,
         ]);
 
     }

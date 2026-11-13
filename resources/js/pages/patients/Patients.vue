@@ -51,15 +51,20 @@ const deletePatient = (id: number) => {
 <template>
     <AppLayout>
         <Head title="Pacientes" />
-        <div class="flex bg-sidebar h-full flex-1 flex-col gap-4 p-4">
-            <h1 class="font-bold" >Lista de Pacientes</h1>
-            <div class="bg-white p-4 relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border md:min-h-min">
-                <div class="flex items-center gap-2 mb-4 justify-between">
-                    <Input type="text" placeholder="Pesquisar ficha" />
-                    <Button variant="outline" class="h-10">Buscar</Button>
+        <main class="min-h-full flex-1 bg-[#f5f7f6] p-4 sm:p-6 xl:p-8">
+            <div class="mx-auto flex w-full max-w-[1440px] flex-col gap-6">
+                <header class="space-y-1">
+                    <p class="text-sm font-medium text-greenPrincipal1">Atendimento</p>
+                    <h1 class="text-2xl font-semibold tracking-tight text-darkTextPrincipal1 sm:text-3xl">Pacientes</h1>
+                    <p class="text-sm text-muted-foreground">Consulte e gerencie as informações dos seus pacientes.</p>
+                </header>
+                <section class="overflow-hidden rounded-2xl border border-sidebar-border/70 bg-white p-4 shadow-sm sm:p-6">
+                    <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <Input type="text" placeholder="Pesquisar paciente" class="sm:max-w-sm" />
+                        <Button variant="outline" class="h-10 self-start sm:self-auto">Buscar</Button>
                 </div>
-                
-                <Table>
+                    <div class="overflow-x-auto">
+                <Table class="min-w-[800px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>ID</TableHead>
@@ -71,7 +76,10 @@ const deletePatient = (id: number) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-for="patient in patients" :key="patient.id">
+                        <TableRow v-if="patients.length === 0">
+                            <TableCell colspan="6" class="h-28 text-center text-sm text-muted-foreground">Nenhum paciente encontrado.</TableCell>
+                        </TableRow>
+                        <TableRow v-for="patient in patients" :key="patient.id" class="transition-colors hover:bg-muted/30">
                             <TableCell>#{{patient.id}}</TableCell>
                             <TableCell>{{patient.name}}</TableCell>
                             <TableCell>{{formatPhone(patient.phone)}}</TableCell>
@@ -80,18 +88,18 @@ const deletePatient = (id: number) => {
                             <TableCell>
 
                                 <!-- sheet -->
-                                <Sheet class="bg-sidebar">
+                                <Sheet>
                                     <SheetTrigger as-child>
                                         <Button size="sm" variant="outline">Ver mais</Button>
                                     </SheetTrigger>
-                                    <SheetContent>
+                                    <SheetContent class="w-full overflow-y-auto sm:max-w-5xl">
                                         <SheetHeader>
                                             <SheetTitle>
                                                 Informações do paciente
                                             </SheetTitle>
                                         </SheetHeader>
-                                        <SheetDescription class="mt-2 flex flex-col gap-2">
-                                            <div class="flex flex-row justify-between items-center rounded-md py-3">
+                                        <SheetDescription class="mt-4 flex flex-col gap-5">
+                                            <div class="flex flex-col items-start justify-between gap-3 rounded-xl border bg-muted/20 p-4 sm:flex-row sm:items-center">
                                                 <h1 class="text-xl font-bold text-darkTextPrincipal1">{{patient.name}}</h1>
                                                 <div class="flex flex-row gap-4 items-center">
                                                     <DropdownMenu>
@@ -107,11 +115,11 @@ const deletePatient = (id: number) => {
                                                 </div>
                                             </div>
 
-                                            <div class="flex flex-row items-start justify-between">
-                                                <div class="w-[490px]">
+                                            <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.8fr)]">
+                                                <div class="min-w-0">
                                                     <TabHistory />
                                                 </div>
-                                                <div class="flex flex-col gap-8 px-4 border-l border-sidebar-border w-[420px]">
+                                                <div class="flex min-w-0 flex-col gap-8 border-t border-sidebar-border pt-5 lg:border-l lg:border-t-0 lg:py-1 lg:pl-5">
                                                     <div class="flex flex-col gap-2">
                                                         <h2 class="font-bold text-darkTextPrincipal1">Informações Pessoais</h2>
                                                         <div class="flex flex-col gap-2">
@@ -156,8 +164,9 @@ const deletePatient = (id: number) => {
                         </TableRow>
                     </TableBody>
                 </Table>
-
+                    </div>
+                </section>
             </div>
-        </div>
+        </main>
     </AppLayout>
 </template>

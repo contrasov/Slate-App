@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Appointments;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Services\AppointmentService;
 use App\Models\Appointment;
 use App\Models\FreeDay;
 use App\Models\WeeklyAvailability;
@@ -13,12 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 class ScheduleController extends Controller
 {
-    protected $appointmentService;
-
-    public function __construct(AppointmentService $appointmentService){
-        $this->appointmentService = $appointmentService;
-    }
-
     public function show(Request $request){
 
         $userId = $request->user()->id;
@@ -183,16 +176,26 @@ class ScheduleController extends Controller
 
     public function changeStatus(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|string|in: Pendente,Confirmado,A Confirmar,Cancelado,Finalizado,Não Compareceu',
+        $validated = $request->validate([
+            'status' => ['required', 'string', 'in:Pendente,Confirmado,A Confirmar,Cancelado,Finalizado,Não Compareceu'],
         ]);
 
-        $appointment = $this->appointmentService->changeStatusAppointment($id, $request->status);
-        
-        if(!$appointment) {
-            return response()->json(['Message' => 'Appointment not foun'], 404);
+        $appointment = Appointment::query()
+            ->where('user_id', $request->user()->id)
+            ->findOrFail($id);
+
+        if ($appointment->status === 'Finalizado') {
+            if ($validated['status'] !== 'Finalizado') {
+                return back()->withErrors([
+                    'status' => 'Uma consulta finalizada não pode ter o status alterado.',
+                ]);
+            }
+
+            return back()->with('success', 'Esta consulta já foi finalizada.');
         }
 
-        
+        $appointment->update(['status' => $validated['status']]);
+
+        return back()->with('success', 'Status da consulta atualizado.');
     }
 }

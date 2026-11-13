@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { type NavItem } from '@/types';
@@ -26,33 +25,42 @@ const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.locati
 </script>
 
 <template>
-    <div class="px-4 py-6">
-        <Heading title="Configurações" description="Gerir o perfil e as definições da conta" />
+    <main class="min-h-full flex-1 bg-[#f5f7f6] p-4 sm:p-6 xl:p-8">
+        <div class="mx-auto flex w-full max-w-[1440px] flex-col gap-6">
+            <header class="space-y-1">
+                <p class="text-sm font-medium text-greenPrincipal1">Conta</p>
+                <h1 class="text-2xl font-semibold tracking-tight text-darkTextPrincipal1 sm:text-3xl">Configurações</h1>
+                <p class="text-sm text-muted-foreground">Gerencie seu perfil e as definições da conta.</p>
+            </header>
 
-        <div class="flex flex-col space-y-8 md:space-y-0 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <aside class="w-full max-w-xl lg:w-48">
-                <nav class="flex flex-col space-x-0 space-y-1">
-                    <Button
-                        v-for="item in sidebarNavItems"
-                        :key="item.href"
-                        variant="ghost"
-                        :class="['w-full justify-start', { 'bg-muted': currentPath === item.href }]"
-                        as-child
-                    >
-                        <Link :href="item.href">
-                            {{ item.title }}
-                        </Link>
-                    </Button>
-                </nav>
-            </aside>
+            <section class="flex flex-col gap-5 rounded-2xl border border-sidebar-border/70 bg-white p-4 shadow-sm sm:p-6 lg:flex-row lg:gap-8">
+                <aside class="w-full shrink-0 lg:w-52">
+                    <nav class="flex gap-2 overflow-x-auto lg:flex-col" aria-label="Seções de configurações">
+                        <Button
+                            v-for="item in sidebarNavItems"
+                            :key="item.href"
+                            variant="ghost"
+                            :class="[
+                                'shrink-0 justify-start rounded-lg px-3',
+                                currentPath === item.href ? 'bg-greenPrincipal1/15 font-medium text-darkTextPrincipal1 hover:bg-greenPrincipal1/20' : 'text-muted-foreground',
+                            ]"
+                            as-child
+                        >
+                            <Link :href="item.href">
+                                {{ item.title }}
+                            </Link>
+                        </Button>
+                    </nav>
+                </aside>
 
-            <Separator class="my-6 md:hidden" />
+                <Separator class="lg:hidden" />
 
-            <div class="flex-1 md:max-w-2xl">
-                <section class="max-w-xl space-y-12">
-                    <slot />
-                </section>
-            </div>
+                <div class="min-w-0 flex-1 lg:border-l lg:border-sidebar-border/70 lg:pl-8">
+                    <section class="max-w-3xl space-y-8">
+                        <slot />
+                    </section>
+                </div>
+            </section>
         </div>
-    </div>
+    </main>
 </template>
